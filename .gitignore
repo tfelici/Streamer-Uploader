@@ -52,12 +52,12 @@ Thumbs.db
 
 # Application specific
 encoderData/
-windows/dist/
 windows/build/
-linux/dist/
 linux/build/
-macos/dist/
 macos/build/
+
+# Note: dist/ directories are tracked to include executable files
+# Only the temporary build/ directories are excluded
 
 # Log files
 *.log
