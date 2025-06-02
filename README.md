@@ -16,11 +16,12 @@ A standalone application that replicates the "Upload Recordings" functionality f
 
 ### For End Users (Using the Executable)
 
-1. Download the `windows/dist` folder containing `EncoderUploader.exe`
-2. Double-click `EncoderUploader.exe` to start the application
-3. The application will open in a native window
-4. Configure your upload server URL in Settings
-5. Upload or delete recordings as needed
+1. **Ready-to-use executable**: The `windows/dist/EncoderUploader.exe` is included in this repository
+2. Download or clone this repository
+3. Navigate to `windows/dist/` folder and double-click `EncoderUploader.exe`
+4. The application will open in a native window (no installation required)
+5. Configure your upload server URL in Settings
+6. Upload or delete recordings as needed
 
 ### For Developers (Building the Executable)
 
