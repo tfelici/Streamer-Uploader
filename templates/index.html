@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encoder Uploader</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>    <div class="navbar">
+        <div class="nav-container">
+            <h1>Encoder Uploader</h1>
+            <nav>
+                <a href="#" id="settings-link" class="nav-link">Settings</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Upload Recordings -->
+        <div class="frame" id="upload-frame">
+            <h2>Upload Recordings</h2>
+            <form id="upload-form">
+                <div class="file-list">
+                    {% if recording_files %}
+                    {% for file in recording_files if not file.active %}
+                    <div class="file-item">
+                        <input type="checkbox" class="upload-checkbox file-checkbox" id="recfile{{ loop.index }}" name="recording_files" value="{{ file.path }}" checked>
+                        <label for="recfile{{ loop.index }}" class="file-info" data-info='{{ file.path|parse_recording_filename|tojson|safe }}'>
+                            {% set info = file.path|parse_recording_filename %}                            {% if info %}
+                                <strong>Timestamp:</strong> {{ info.timestamp | datetimeformat }}<br>
+                                <strong>Duration:</strong> {{ info.duration | durationformat }}<br>
+                                <strong>Size:</strong> {{ file.size | filesizeformat }}
+                            {% else %}
+                                <strong>File:</strong> {{ file.path }}<br>
+                                <strong>Size:</strong> {{ file.size | filesizeformat }}
+                            {% endif %}
+                        </label>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="file-item">
+                        <p>No recordings available for upload.</p>
+                    </div>
+                    {% endif %}
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                    <button type="submit" id="upload-btn" class="btn btn-success">Upload to Server</button>
+                    <button type="button" id="delete-btn" class="btn btn-danger">Delete Selected</button>
+                </div>
+                <div id="upload-result" style="margin-top: 1.5rem;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Settings</h2>
+            <form id="settings-form">
+                <div class="form-group">
+                    <label for="upload_url">Upload Server URL:</label>
+                    <input type="url" id="upload_url" name="upload_url" placeholder="https://example.com/ajaxservices.php?rtmpkey=YOUR_KEY" required>
+                    <small>Enter the full URL where recordings should be uploaded</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+            </form>
+            <div id="settings-message" class="message"></div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const uploadForm = document.getElementById('upload-form');
+        const uploadBtn = document.getElementById('upload-btn');
+        const uploadResult = document.getElementById('upload-result');
+        const deleteBtn = document.getElementById('delete-btn');
+        const settingsLink = document.getElementById('settings-link');
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsForm = document.getElementById('settings-form');
+        const closeModal = document.querySelector('.close');
+
+        // Upload functionality
+        if (uploadForm) {
+            let resultList = document.createElement('ul');
+            resultList.style.textAlign = 'left';
+            uploadResult.innerHTML = '';
+            uploadResult.appendChild(resultList);
+
+            uploadForm.onsubmit = async function(e) {
+                e.preventDefault();
+                uploadBtn.disabled = true;
+                resultList.innerHTML = '';
+                
+                const checkboxes = document.querySelectorAll('.upload-checkbox:checked');
+                if (checkboxes.length === 0) {
+                    resultList.innerHTML = '<li style="color:red;">No recordings selected.</li>';
+                    uploadBtn.disabled = false;
+                    return;
+                }
+
+                let successCount = 0;
+                for (let i = 0; i < checkboxes.length; i++) {
+                    const filePath = checkboxes[i].value;
+                    const formData = new FormData();
+                    formData.append('file_path', filePath);
+                    
+                    const li = document.createElement('li');
+                    li.textContent = `Uploading ${filePath}... (${i+1}/${checkboxes.length})`;
+                    
+                    const progress = document.createElement('progress');
+                    progress.value = 0;
+                    progress.max = 100;
+                    progress.style.width = '120px';
+                    progress.style.marginLeft = '1em';
+                    li.appendChild(progress);
+                    
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.textContent = 'Cancel Upload';
+                    cancelBtn.style.marginLeft = '1em';
+                    cancelBtn.type = 'button';
+                    li.appendChild(cancelBtn);
+                    resultList.appendChild(li);
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/upload-recording');
+                    
+                    xhr.upload.onprogress = function(event) {
+                        if (event.lengthComputable) {
+                            progress.value = Math.round((event.loaded / event.total) * 100);
+                        }
+                    };
+
+                    let cancelled = false;
+                    cancelBtn.onclick = function() {
+                        cancelled = true;
+                        xhr.abort();
+                        li.style.color = 'red';
+                        li.textContent = `Upload cancelled: ${filePath}`;
+                        progress.remove();
+                        cancelBtn.remove();
+                        uploadBtn.disabled = false;
+                    };
+
+                    xhr.onload = function() {
+                        if (cancelled) return;
+                        if (xhr.status !== 200) {
+                            li.style.color = 'red';
+                            li.textContent = `Error uploading ${filePath}: ${xhr.statusText}`;
+                            progress.remove();
+                            cancelBtn.remove();
+                            uploadBtn.disabled = false;
+                            return;
+                        }
+                        
+                        let result;
+                        try {
+                            result = JSON.parse(xhr.responseText);
+                        } catch (err) {
+                            li.style.color = 'red';
+                            li.textContent = `Error uploading ${filePath}: Invalid server response.`;
+                            progress.remove();
+                            cancelBtn.remove();
+                            uploadBtn.disabled = false;
+                            return;
+                        }
+                        
+                        if (result.error) {
+                            li.style.color = 'red';
+                            li.textContent = `Error uploading ${filePath}: ${result.error}`;
+                            progress.remove();
+                            cancelBtn.remove();
+                            uploadBtn.disabled = false;
+                            return;
+                        }
+                        
+                        li.style.color = 'green';
+                        let replacedMsg = '';
+                        if (typeof result.files_replaced !== 'undefined') {
+                            replacedMsg = ` (${result.files_replaced} file${result.files_replaced == 1 ? '' : 's'} replaced on server)`;
+                        }
+                        li.textContent = `Uploaded ${filePath}: Success.` + replacedMsg;
+                        progress.remove();
+                        cancelBtn.remove();
+                        successCount++;
+                        
+                        const checkboxDiv = checkboxes[i].closest('div');
+                        if (checkboxDiv) checkboxDiv.remove();
+                        if (document.querySelectorAll('.upload-checkbox').length === 0) {
+                            uploadBtn.remove();
+                        }
+                    };
+
+                    xhr.onerror = function() {
+                        if (cancelled) return;
+                        li.style.color = 'red';
+                        li.textContent = `Error uploading ${filePath}: Network error.`;
+                        progress.remove();
+                        cancelBtn.remove();
+                        uploadBtn.disabled = false;
+                    };
+
+                    xhr.send(formData);
+                }
+
+                const observer = new MutationObserver(() => {
+                    if (resultList.querySelectorAll('progress').length === 0) {
+                        const summary = document.createElement('li');
+                        summary.style.color = 'green';
+                        summary.textContent = `Successfully uploaded ${successCount} file(s).`;
+                        resultList.appendChild(summary);
+                        uploadBtn.disabled = false;
+                        observer.disconnect();
+                    }
+                });
+                observer.observe(resultList, { childList: true, subtree: true });
+            };
+        }        async function getUploadServerUrl() {
+            try {
+                const resp = await fetch('/settings');
+                const data = await resp.json();
+                return data.upload_url || '';
+            } catch (e) {
+                return '';
+            }
+        }        async function fetchOverlappingInfo(uploadUrl, file) {
+            if (!uploadUrl) return null;
+            // Handle both Windows and Unix path separators
+            const filename = file.split(/[/\\]/).pop();
+            let url = new URL(uploadUrl);
+            url.searchParams.set('command', 'getrecordingsinfo');
+            url.searchParams.set('videofilename', filename);
+            try {
+                const response = await fetch(url, { method: 'GET' });
+                if (!response.ok) throw new Error('Network response was not ok. URL: ' + url.toString());
+                return await response.json();
+            } catch (e) {
+                return { error: e.message + ' (URL: ' + url.toString() + ')' };
+            }
+        }
+
+        // Check for overlapping files on server
+        (async function() {
+            const uploadUrl = await getUploadServerUrl();
+            const checkboxes = document.querySelectorAll('.upload-checkbox');
+            for (const checkbox of checkboxes) {
+                const file = checkbox.value;
+                const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                if (!file || !label) continue;                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'overlap-loading';
+                loadingDiv.textContent = 'Checking server for overlapping files...';
+                label.appendChild(loadingDiv);
+                const info = await fetchOverlappingInfo(uploadUrl, file);
+                loadingDiv.remove();
+                let localInfo = null;
+                try {
+                    localInfo = JSON.parse(label.getAttribute('data-info'));
+                } catch (e) {}
+                if (info && info.overlapping_files && info.overlapping_files.length > 0 && localInfo) {
+                    const barWidth = 220;
+                    const barHeight = 18;
+                    const barColor = "#eee";
+                    const borderColor = "#bbb";
+                    const overlapColor = "#d33";
+                    const localStart = Number(localInfo.timestamp);
+                    const localDuration = Number(localInfo.duration);
+                    const localEnd = localStart + localDuration;
+                    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                    svg.setAttribute("width", barWidth);
+                    svg.setAttribute("height", barHeight);
+                    svg.className = 'overlap-timeline';
+                    const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    bg.setAttribute("x", 0);
+                    bg.setAttribute("y", 2);
+                    bg.setAttribute("width", barWidth);
+                    bg.setAttribute("height", barHeight - 4);
+                    bg.setAttribute("fill", barColor);
+                    bg.setAttribute("stroke", borderColor);
+                    bg.setAttribute("stroke-width", 1);
+                    svg.appendChild(bg);
+                    info.overlapping_files.forEach(f => {
+                        const overlapStart = Math.max(Number(f.timestamp), localStart);
+                        const overlapEnd = Math.min(Number(f.timestamp) + Number(f.duration), localEnd);
+                        if (overlapEnd > overlapStart) {
+                            const x = ((overlapStart - localStart) / localDuration) * barWidth;
+                            const w = ((overlapEnd - overlapStart) / localDuration) * barWidth;
+                            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                            rect.setAttribute("x", x);
+                            rect.setAttribute("y", 2);
+                            rect.setAttribute("width", w);
+                            rect.setAttribute("height", barHeight - 4);
+                            rect.setAttribute("fill", overlapColor);
+                            rect.setAttribute("opacity", 0.8);
+                            svg.appendChild(rect);
+                        }
+                    });
+                    const div = document.createElement('div');
+                    div.className = 'overlap-info';
+                    div.innerHTML = '<strong>Overlapping server files:</strong>';
+                    div.appendChild(svg);
+                    const overlaps = info.overlapping_files.map(f =>
+                        `Server file: ${f.timestamp} (${f.duration}s, ${f.size_mb} MB)`
+                    ).join('<br>');
+                    const textDiv = document.createElement('div');
+                    textDiv.className = 'overlap-details';
+                    textDiv.innerHTML = overlaps;
+                    div.appendChild(textDiv);
+                    label.appendChild(div);
+                } else if (info && info.error) {
+                    const div = document.createElement('div');
+                    div.className = 'overlap-error';
+                    div.textContent = 'Error: ' + info.error;
+                    label.appendChild(div);
+                } else {
+                    const div = document.createElement('div');
+                    div.className = 'no-overlap';
+                    div.textContent = 'No overlapping files on server.';
+                    label.appendChild(div);
+                }
+            }
+        })();
+
+        // Delete functionality
+        if (deleteBtn && uploadForm) {
+            deleteBtn.onclick = async function() {
+                const checkboxes = document.querySelectorAll('.upload-checkbox:checked');
+                if (checkboxes.length === 0) {
+                    uploadResult.innerHTML = '<span style="color:red;">No recordings selected.</span>';
+                    return;
+                }
+                
+                if (!confirm('Delete selected recordings?')) return;
+                
+                deleteBtn.disabled = true;
+                uploadBtn.disabled = true;
+                
+                let deletedCount = 0;
+                let resultList = uploadResult.querySelector('ul');
+                if (!resultList) {
+                    resultList = document.createElement('ul');
+                    uploadResult.innerHTML = '';
+                    uploadResult.appendChild(resultList);
+                }
+                resultList.innerHTML = '';
+                
+                for (let i = 0; i < checkboxes.length; i++) {
+                    const filePath = checkboxes[i].value;
+                    const li = document.createElement('li');
+                    li.textContent = `Deleting ${filePath}... (${i+1}/${checkboxes.length})`;
+                    resultList.appendChild(li);
+                    
+                    try {
+                        const resp = await fetch('/delete-recording', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ file_path: filePath })
+                        });
+                        const result = await resp.json();
+                        
+                        if (resp.ok && !result.error) {
+                            li.style.color = 'green';
+                            li.textContent = `Deleted ${filePath}`;
+                            deletedCount++;
+                            const checkboxDiv = checkboxes[i].closest('div');
+                            if (checkboxDiv) checkboxDiv.remove();
+                        } else {
+                            li.style.color = 'red';
+                            li.textContent = `Error deleting ${filePath}: ${result.error || 'Unknown error'}`;
+                        }
+                    } catch (e) {
+                        li.style.color = 'red';
+                        li.textContent = `Error deleting ${filePath}: ${e.message}`;
+                    }
+                }
+                
+                if (deletedCount > 0) {
+                    const summary = document.createElement('li');
+                    summary.style.color = 'green';
+                    summary.textContent = `Successfully deleted ${deletedCount} file(s).`;
+                    resultList.appendChild(summary);
+                }
+                
+                deleteBtn.disabled = false;
+                uploadBtn.disabled = false;
+                
+                if (document.querySelectorAll('.upload-checkbox').length === 0) {
+                    uploadBtn.remove();
+                    deleteBtn.remove();
+                }
+            };
+        }
+
+        // Settings modal
+        settingsLink.onclick = function(e) {
+            e.preventDefault();
+            loadSettings();
+            settingsModal.style.display = 'block';
+        };
+
+        closeModal.onclick = function() {
+            settingsModal.style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+            if (event.target === settingsModal) {
+                settingsModal.style.display = 'none';
+            }
+        };
+
+        settingsForm.onsubmit = async function(e) {
+            e.preventDefault();
+            const formData = new FormData(settingsForm);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const resp = await fetch('/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (resp.ok) {
+                    document.getElementById('settings-message').innerHTML = '<span style="color:green;">Settings saved successfully!</span>';
+                    setTimeout(() => {
+                        settingsModal.style.display = 'none';
+                    }, 1500);
+                } else {
+                    document.getElementById('settings-message').innerHTML = '<span style="color:red;">Error saving settings.</span>';
+                }
+            } catch (e) {
+                document.getElementById('settings-message').innerHTML = '<span style="color:red;">Error: ' + e.message + '</span>';
+            }
+        };
+
+        async function loadSettings() {
+            try {
+                const resp = await fetch('/settings');
+                const settings = await resp.json();
+                document.getElementById('upload_url').value = settings.upload_url || '';
+            } catch (e) {
+                console.error('Error loading settings:', e);
+            }
+        }
+    });
+    </script>
+</body>
+</html>
