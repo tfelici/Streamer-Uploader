@@ -23,11 +23,7 @@ MANIFEST
 
 # PyInstaller
 *.manifest
-
-# Build-specific spec files (but allow platform-specific ones)
-!windows/*.spec
-!linux/*.spec
-!macos/*.spec
+*.spec
 
 # Environments
 .env
