@@ -23,7 +23,8 @@ MANIFEST
 
 # PyInstaller
 *.manifest
-*.spec
+# Exclude auto-generated spec files but keep our custom ones
+*_auto.spec
 
 # Environments
 .env
