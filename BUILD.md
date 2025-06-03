@@ -17,23 +17,27 @@
 
 ## Output
 
-- **`windows/dist/EncoderUploader.exe`** - Standalone executable (13.8 MB)
+- **`windows/dist/EncoderUploader.exe`** - Standalone executable (14.4 MB)
 - Ready to distribute as a single file
 
 ## Platform-Specific Builds
 
 ### Windows
 - Navigate to `windows/` folder
-- Run `build_executable.bat`
-- Output: `windows/dist/EncoderUploader.exe`
+- Run `build_standalone.bat`
+- Output: `windows/dist/EncoderUploader_Standalone.exe` (~14.4MB)
 
-### Linux (Future)
-- Files will be in `linux/` folder
-- Build scripts to be created
+### Linux
+- Navigate to `linux/` folder
+- Run `chmod +x build_executable.sh && ./build_executable.sh`
+- Output: `linux/dist/EncoderUploader` (~15-20MB)
+- Requires Linux environment to build
 
-### macOS (Future)  
-- Files will be in `macos/` folder
-- Build scripts to be created
+### macOS
+- Navigate to `macos/` folder
+- Run `chmod +x build_executable.sh && ./build_executable.sh`
+- Output: `macos/dist/EncoderUploader` (~15-20MB)
+- Requires macOS environment to build
 
 ## Features
 

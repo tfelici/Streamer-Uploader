@@ -1,10 +1,11 @@
-# Encoder Uploader - Standalone Windows Application
+# Encoder Uploader - Cross-Platform Application
 
-A standalone application that replicates the "Upload Recordings" functionality from the RPI Encoder app, packaged as a Windows executable with integrated web viewer.
+A standalone application that replicates the "Upload Recordings" functionality from the RPI Encoder app, packaged as platform-specific executables with integrated web viewer.
 
 ## Features
 
-- **Standalone Windows Executable**: No Python installation required for end users
+- **Cross-Platform Support**: Available for Windows, Linux, and macOS
+- **Standalone Executables**: No Python installation required for end users
 - **Integrated Web Viewer**: Native window with built-in browser (no external browser needed)
 - **Upload Recordings**: Upload MP4 recordings to configured server with real-time progress tracking
 - **Delete Recordings**: Remove recordings from local storage
@@ -22,13 +23,35 @@ A standalone application that replicates the "Upload Recordings" functionality f
   - Phase 2 (20-100%): Remote upload to configured server
 - ✅ **Better User Experience**: Users can now see the actual upload progress for large files
 
+## Platform Support
+
+### 🪟 Windows
+- **Status**: ✅ **Available** - Ready for production use
+- **Download**: `windows/dist/EncoderUploader_Standalone.exe` (14.4MB)
+- **Requirements**: Windows 10 or higher
+- **Features**: Native Windows executable with integrated webview
+
+### 🐧 Linux  
+- **Status**: 🔧 **Build Ready** - Spec files and build scripts prepared
+- **Build**: Navigate to `linux/` directory and run `./build_executable.sh`
+- **Output**: `linux/dist/EncoderUploader` (~15-20MB)
+- **Requirements**: Linux environment (Ubuntu, CentOS, etc.)
+
+### 🍎 macOS
+- **Status**: 🔧 **Build Ready** - Spec files and build scripts prepared  
+- **Build**: Navigate to `macos/` directory and run `./build_executable.sh`
+- **Output**: `macos/dist/EncoderUploader` (~15-20MB)
+- **Requirements**: macOS environment with Xcode Command Line Tools
+
+*Note: Linux and macOS executables need to be built on their respective platforms. Windows builds are already available.*
+
 ## Quick Start
 
 ### For End Users (Download Ready-to-Use Executable)
 
 **Option 1: Direct Download from Git Repository**
 1. **Download**: The standalone executable is included in this repository at:
-   `windows/dist/EncoderUploader.exe` (13.7MB)
+   `windows/dist/EncoderUploader.exe` (14.4MB)
 2. **Download the entire folder**: `windows/dist/`
 3. **Run**: Double-click `EncoderUploader.exe` (no installation required)
 4. **Configure**: Set your upload server URL in Settings
@@ -36,7 +59,7 @@ A standalone application that replicates the "Upload Recordings" functionality f
 
 **Features of the Standalone Executable:**
 - ✅ **No Dependencies**: No Python or other software installation required
-- ✅ **Self-Contained**: All libraries and dependencies bundled (13.7MB)
+- ✅ **Self-Contained**: All libraries and dependencies bundled (14.4MB)
 - ✅ **Native Window**: Integrated web browser viewer
 - ✅ **Portable**: Copy to any Windows machine and run immediately
 
