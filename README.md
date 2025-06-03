@@ -18,9 +18,9 @@ A standalone application that replicates the "Upload Recordings" functionality f
 
 **Option 1: Direct Download from Git Repository**
 1. **Download**: The standalone executable is included in this repository at:
-   `windows/dist/EncoderUploader_Standalone/EncoderUploader_Standalone.exe` (13.7MB)
-2. **Download the entire folder**: `windows/dist/EncoderUploader_Standalone/`
-3. **Run**: Double-click `EncoderUploader_Standalone.exe` (no installation required)
+   `windows/dist/EncoderUploader.exe` (13.7MB)
+2. **Download the entire folder**: `windows/dist/`
+3. **Run**: Double-click `EncoderUploader.exe` (no installation required)
 4. **Configure**: Set your upload server URL in Settings
 5. **Use**: Upload or delete recordings as needed
 
@@ -67,11 +67,12 @@ Encoder Uploader/
 ├── README.md                 # This documentation
 ├── BUILD.md                  # Build instructions
 ├── windows/                  # Windows-specific build files
-│   ├── EncoderUploader.spec  # PyInstaller configuration
-│   ├── build_executable.bat  # Build script
-│   ├── create_package.bat    # Distribution package creator
+│   ├── EncoderUploader_onefile.spec  # PyInstaller configuration
+│   ├── build_standalone.bat  # Build script
 │   └── dist/                 # Built executable (after building)
-│       └── EncoderUploader.exe
+│       ├── EncoderUploader.exe  # Windows executable
+│       ├── encoderData/      # Data directory structure
+│       └── README.md         # Distribution documentation
 ├── linux/                    # Linux build files (future)
 ├── macos/                    # macOS build files (future)
 ├── templates/
