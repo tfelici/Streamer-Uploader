@@ -6,7 +6,6 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -53,12 +52,18 @@ Thumbs.db
 
 # Application specific
 encoderData/
+
+# Build directories (temporary files)
+build/
 windows/build/
 linux/build/
 macos/build/
 
-# Note: dist/ directories are tracked to include executable files
-# Only the temporary build/ directories are excluded
+# Allow distribution directories with final executables
+# These contain the ready-to-distribute binaries
+!windows/dist/
+!linux/dist/
+!macos/dist/
 
 # Log files
 *.log
