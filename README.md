@@ -14,16 +14,23 @@ A standalone application that replicates the "Upload Recordings" functionality f
 
 ## Quick Start
 
-### For End Users (Using the Executable)
+### For End Users (Download Ready-to-Use Executable)
 
-1. **Ready-to-use executable**: The `windows/dist/EncoderUploader.exe` is included in this repository
-2. Download or clone this repository
-3. Navigate to `windows/dist/` folder and double-click `EncoderUploader.exe`
-4. The application will open in a native window (no installation required)
-5. Configure your upload server URL in Settings
-6. Upload or delete recordings as needed
+**Option 1: Direct Download from Git Repository**
+1. **Download**: The standalone executable is included in this repository at:
+   `windows/dist/EncoderUploader_Standalone/EncoderUploader_Standalone.exe` (13.7MB)
+2. **Download the entire folder**: `windows/dist/EncoderUploader_Standalone/`
+3. **Run**: Double-click `EncoderUploader_Standalone.exe` (no installation required)
+4. **Configure**: Set your upload server URL in Settings
+5. **Use**: Upload or delete recordings as needed
 
-### For Developers (Building the Executable)
+**Features of the Standalone Executable:**
+- ✅ **No Dependencies**: No Python or other software installation required
+- ✅ **Self-Contained**: All libraries and dependencies bundled (13.7MB)
+- ✅ **Native Window**: Integrated web browser viewer
+- ✅ **Portable**: Copy to any Windows machine and run immediately
+
+### For Developers (Building from Source)
 
 #### Prerequisites
 
@@ -40,9 +47,9 @@ A standalone application that replicates the "Upload Recordings" functionality f
 3. **Build Executable**:
    ```bat
    cd windows
-   build_executable.bat
+   build_standalone.bat
    ```
-4. **Find Output**: The executable will be in the `windows/dist` folder
+4. **Find Output**: The executable will be in `windows/dist/EncoderUploader_Standalone/`
 
 #### Testing Before Building
 

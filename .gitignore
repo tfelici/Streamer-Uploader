@@ -65,6 +65,9 @@ macos/build/
 !linux/dist/
 !macos/dist/
 
+# Exclude release packages (zip files)
+*.zip
+
 # Log files
 *.log
 

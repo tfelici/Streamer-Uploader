@@ -56,6 +56,10 @@ if exist "encoderData\settings.json" copy "encoderData\settings.json" "dist\Enco
 REM Copy existing recordings if they exist
 if exist "encoderData\recordings\broadcast\*.mp4" copy "encoderData\recordings\broadcast\*.mp4" "dist\EncoderUploader_Standalone\encoderData\recordings\broadcast\"
 
+REM Create a release package (ZIP file for easy distribution)
+echo Creating release package...
+powershell -Command "Compress-Archive -Path 'dist\EncoderUploader_Standalone' -DestinationPath 'EncoderUploader_Standalone_Windows.zip' -Force"
+
 echo.
 echo ====================================================================
 echo BUILD COMPLETED SUCCESSFULLY!
@@ -63,8 +67,11 @@ echo ====================================================================
 echo.
 echo Standalone executable created:
 echo Location: dist\EncoderUploader_Standalone\EncoderUploader_Standalone.exe
+echo Release Package: EncoderUploader_Standalone_Windows.zip (ready for distribution)
 echo.
-echo Distribution: Copy the entire 'EncoderUploader_Standalone' folder
+echo Distribution Options:
+echo 1. Copy the entire 'EncoderUploader_Standalone' folder
+echo 2. Share the 'EncoderUploader_Standalone_Windows.zip' file
 echo.
 echo Features included:
 echo - Self-contained single executable (no Python required)
