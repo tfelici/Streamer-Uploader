@@ -120,21 +120,27 @@
                     cancelBtn.style.marginLeft = '1em';
                     cancelBtn.type = 'button';
                     li.appendChild(cancelBtn);
-                    resultList.appendChild(li);
-
-                    const xhr = new XMLHttpRequest();
+                    resultList.appendChild(li);                    const xhr = new XMLHttpRequest();
                     xhr.open('POST', '/upload-recording');
                     
+                    // Initial progress tracking for local upload (will be quick)
                     xhr.upload.onprogress = function(event) {
                         if (event.lengthComputable) {
-                            progress.value = Math.round((event.loaded / event.total) * 100);
+                            const localProgress = Math.round((event.loaded / event.total) * 20); // Only 20% for local upload
+                            progress.value = localProgress;
                         }
                     };
 
                     let cancelled = false;
+                    let uploadId = null;
+                    let progressInterval = null;
+                    
                     cancelBtn.onclick = function() {
                         cancelled = true;
                         xhr.abort();
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                        }
                         li.style.color = 'red';
                         li.textContent = `Upload cancelled: ${filePath}`;
                         progress.remove();
@@ -174,20 +180,63 @@
                             return;
                         }
                         
-                        li.style.color = 'green';
-                        let replacedMsg = '';
-                        if (typeof result.files_replaced !== 'undefined') {
-                            replacedMsg = ` (${result.files_replaced} file${result.files_replaced == 1 ? '' : 's'} replaced on server)`;
-                        }
-                        li.textContent = `Uploaded ${filePath}: Success.` + replacedMsg;
-                        progress.remove();
-                        cancelBtn.remove();
-                        successCount++;
-                        
-                        const checkboxDiv = checkboxes[i].closest('div');
-                        if (checkboxDiv) checkboxDiv.remove();
-                        if (document.querySelectorAll('.upload-checkbox').length === 0) {
-                            uploadBtn.remove();
+                        // Start tracking remote upload progress
+                        uploadId = result.upload_id;
+                        if (uploadId) {
+                            li.textContent = `Uploading ${filePath} to remote server... (${i+1}/${checkboxes.length})`;
+                            progress.value = 20; // Local upload complete
+                            
+                            progressInterval = setInterval(() => {
+                                if (cancelled) {
+                                    clearInterval(progressInterval);
+                                    return;
+                                }
+                                
+                                fetch(`/upload-progress/${uploadId}`)
+                                    .then(resp => resp.json())
+                                    .then(progressData => {
+                                        if (progressData.status === 'uploading') {
+                                            // Scale remote progress from 20% to 100%
+                                            const remoteProgress = 20 + Math.round((progressData.progress / 100) * 80);
+                                            progress.value = remoteProgress;
+                                        } else if (progressData.status === 'completed') {
+                                            clearInterval(progressInterval);
+                                            progress.value = 100;
+                                            
+                                            const finalResult = progressData.result;
+                                            li.style.color = 'green';
+                                            let replacedMsg = '';
+                                            if (typeof finalResult.files_replaced !== 'undefined') {
+                                                replacedMsg = ` (${finalResult.files_replaced} file${finalResult.files_replaced == 1 ? '' : 's'} replaced on server)`;
+                                            }
+                                            li.textContent = `Uploaded ${filePath}: Success.` + replacedMsg;
+                                            progress.remove();
+                                            cancelBtn.remove();
+                                            successCount++;
+                                            
+                                            const checkboxDiv = checkboxes[i].closest('div');
+                                            if (checkboxDiv) checkboxDiv.remove();
+                                            if (document.querySelectorAll('.upload-checkbox').length === 0) {
+                                                uploadBtn.remove();
+                                            }
+                                        } else if (progressData.status === 'error') {
+                                            clearInterval(progressInterval);
+                                            li.style.color = 'red';
+                                            li.textContent = `Error uploading ${filePath}: ${progressData.error}`;
+                                            progress.remove();
+                                            cancelBtn.remove();
+                                            uploadBtn.disabled = false;
+                                        }
+                                    })
+                                    .catch(err => {
+                                        clearInterval(progressInterval);
+                                        li.style.color = 'red';
+                                        li.textContent = `Error uploading ${filePath}: Progress check failed.`;
+                                        progress.remove();
+                                        cancelBtn.remove();
+                                        uploadBtn.disabled = false;
+                                    });
+                            }, 1000); // Check progress every second
                         }
                     };
 

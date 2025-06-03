@@ -22,6 +22,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 app = Flask(__name__)
 
+# Global dictionary to track upload progress
+upload_progress = {}
+
 # Configuration
 if getattr(sys, 'frozen', False):
     # Running as compiled executable
@@ -173,6 +176,9 @@ def settings():
 
 @app.route('/upload-recording', methods=['POST'])
 def upload_recording():
+    import uuid
+    import threading
+    
     file_path = request.form.get('file_path')
     if not file_path or not os.path.exists(file_path):
         return jsonify({'error': 'File not found'}), 400
@@ -180,29 +186,96 @@ def upload_recording():
     settings = load_settings()
     upload_url = settings.get('upload_url')
     if not upload_url:
-        return jsonify({'error': 'Upload URL not configured'}), 400    # Ensure command=replacerecordings is present
+        return jsonify({'error': 'Upload URL not configured'}), 400
+        
+    # Ensure command=replacerecordings is present
     if 'command=replacerecordings' not in upload_url:
         if '?' in upload_url:
             upload_url += '&command=replacerecordings'
         else:
             upload_url += '?command=replacerecordings'
     
-    try:
-        with open(file_path, 'rb') as file:
-            files = {'video': (secure_filename(os.path.basename(file_path)), file)}
-            response = requests.post(upload_url, files=files, timeout=300)
+    # Generate unique upload ID for progress tracking
+    upload_id = str(uuid.uuid4())
+    
+    # Store upload progress globally
+    upload_progress[upload_id] = {
+        'progress': 0,
+        'status': 'starting',
+        'error': None,
+        'result': None
+    }
+    
+    def upload_file_async():
+        try:
+            upload_progress[upload_id]['status'] = 'uploading'
             
-            if response.status_code == 200:
-                try:
-                    result = response.json()
-                    return jsonify(result)
-                except:
-                    return jsonify({'success': True, 'message': 'Upload completed'})
-            else:
-                return jsonify({'error': f'Upload failed: {response.status_code}'}), 500
+            # Get file size for progress calculation
+            file_size = os.path.getsize(file_path)
+            
+            # Custom upload with progress tracking
+            with open(file_path, 'rb') as f:
+                # Create a wrapper that tracks read progress
+                class ProgressFile:
+                    def __init__(self, file_obj, file_size, upload_id):
+                        self.file_obj = file_obj
+                        self.file_size = file_size
+                        self.upload_id = upload_id
+                        self.bytes_read = 0
+                    
+                    def read(self, size=-1):
+                        data = self.file_obj.read(size)
+                        self.bytes_read += len(data)
+                        progress = min(100, int((self.bytes_read / self.file_size) * 100))
+                        upload_progress[self.upload_id]['progress'] = progress
+                        return data
+                    
+                    def __getattr__(self, name):
+                        return getattr(self.file_obj, name)
                 
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+                progress_file = ProgressFile(f, file_size, upload_id)
+                files = {'video': (secure_filename(os.path.basename(file_path)), progress_file)}
+                
+                response = requests.post(upload_url, files=files, timeout=300)
+                
+                if response.status_code == 200:
+                    try:
+                        result = response.json()
+                    except:
+                        result = {'success': True, 'message': 'Upload completed'}
+                else:
+                    result = {'error': f'Upload failed: {response.status_code}'}
+                
+                upload_progress[upload_id]['status'] = 'completed'
+                upload_progress[upload_id]['progress'] = 100
+                upload_progress[upload_id]['result'] = result
+                
+                # If upload succeeded and no error, delete the original file
+                if result.get('error') == '':
+                    try:
+                        os.remove(file_path)
+                    except Exception:
+                        pass  # Ignore deletion errors
+                        
+        except Exception as e:
+            upload_progress[upload_id]['status'] = 'error'
+            upload_progress[upload_id]['error'] = f'Upload failed: {e}'
+    
+    # Start upload in background thread
+    thread = threading.Thread(target=upload_file_async)
+    thread.daemon = True
+    thread.start()
+    
+    return jsonify({'upload_id': upload_id, 'status': 'started'})
+
+@app.route('/upload-progress/<upload_id>')
+def get_upload_progress(upload_id):
+    progress_data = upload_progress.get(upload_id, {
+        'progress': 0,
+        'status': 'not_found',
+        'error': 'Upload ID not found'
+    })
+    return jsonify(progress_data)
 
 @app.route('/delete-recording', methods=['POST'])
 def delete_recording():
