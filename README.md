@@ -6,11 +6,21 @@ A standalone application that replicates the "Upload Recordings" functionality f
 
 - **Standalone Windows Executable**: No Python installation required for end users
 - **Integrated Web Viewer**: Native window with built-in browser (no external browser needed)
-- **Upload Recordings**: Upload MP4 recordings to configured server
+- **Upload Recordings**: Upload MP4 recordings to configured server with real-time progress tracking
 - **Delete Recordings**: Remove recordings from local storage
 - **Settings Management**: Configure upload server URL
 - **Overlapping Files Detection**: Visual timeline showing file overlaps on server
 - **Modern UI**: Responsive design with progress bars and status indicators
+
+## Latest Updates
+
+**Upload Progress Fix (June 2025)**
+- ✅ **Fixed Progress Bar Issue**: Progress now accurately tracks server-side upload progress instead of jumping from 0% to 100%
+- ✅ **Real-Time Progress**: Shows actual upload progress to remote server with 1-second updates
+- ✅ **Two-Phase Progress**: 
+  - Phase 1 (0-20%): Local upload to application
+  - Phase 2 (20-100%): Remote upload to configured server
+- ✅ **Better User Experience**: Users can now see the actual upload progress for large files
 
 ## Quick Start
 
