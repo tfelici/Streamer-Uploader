@@ -40,25 +40,25 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-REM Create directory structure for standalone version
+REM Create directory structure for distribution
 echo Setting up distribution structure...
-if not exist "dist\EncoderUploader_Standalone" mkdir "dist\EncoderUploader_Standalone"
-if not exist "dist\EncoderUploader_Standalone\encoderData" mkdir "dist\EncoderUploader_Standalone\encoderData"
-if not exist "dist\EncoderUploader_Standalone\encoderData\recordings" mkdir "dist\EncoderUploader_Standalone\encoderData\recordings"
-if not exist "dist\EncoderUploader_Standalone\encoderData\recordings\broadcast" mkdir "dist\EncoderUploader_Standalone\encoderData\recordings\broadcast"
+if not exist "dist" mkdir "dist"
+if not exist "dist\encoderData" mkdir "dist\encoderData"
+if not exist "dist\encoderData\recordings" mkdir "dist\encoderData\recordings"
+if not exist "dist\encoderData\recordings\broadcast" mkdir "dist\encoderData\recordings\broadcast"
 
-REM Move the standalone executable
-move "dist\EncoderUploader_Standalone.exe" "dist\EncoderUploader_Standalone\EncoderUploader_Standalone.exe"
+REM Move the standalone executable to dist folder
+move "dist\EncoderUploader_Standalone.exe" "dist\EncoderUploader.exe"
 
 REM Copy existing settings if they exist
-if exist "encoderData\settings.json" copy "encoderData\settings.json" "dist\EncoderUploader_Standalone\encoderData\settings.json"
+if exist "encoderData\settings.json" copy "encoderData\settings.json" "dist\encoderData\settings.json"
 
 REM Copy existing recordings if they exist
-if exist "encoderData\recordings\broadcast\*.mp4" copy "encoderData\recordings\broadcast\*.mp4" "dist\EncoderUploader_Standalone\encoderData\recordings\broadcast\"
+if exist "encoderData\recordings\broadcast\*.mp4" copy "encoderData\recordings\broadcast\*.mp4" "dist\encoderData\recordings\broadcast\"
 
 REM Create a release package (ZIP file for easy distribution)
 echo Creating release package...
-powershell -Command "Compress-Archive -Path 'dist\EncoderUploader_Standalone' -DestinationPath 'EncoderUploader_Standalone_Windows.zip' -Force"
+powershell -Command "Compress-Archive -Path 'dist' -DestinationPath 'EncoderUploader_Windows.zip' -Force"
 
 echo.
 echo ====================================================================
@@ -66,12 +66,12 @@ echo BUILD COMPLETED SUCCESSFULLY!
 echo ====================================================================
 echo.
 echo Standalone executable created:
-echo Location: dist\EncoderUploader_Standalone\EncoderUploader_Standalone.exe
-echo Release Package: EncoderUploader_Standalone_Windows.zip (ready for distribution)
+echo Location: windows\dist\EncoderUploader.exe
+echo Release Package: windows\EncoderUploader_Windows.zip (ready for distribution)
 echo.
 echo Distribution Options:
-echo 1. Copy the entire 'EncoderUploader_Standalone' folder
-echo 2. Share the 'EncoderUploader_Standalone_Windows.zip' file
+echo 1. Copy the entire 'dist' folder
+echo 2. Share the 'EncoderUploader_Windows.zip' file
 echo.
 echo Features included:
 echo - Self-contained single executable (no Python required)
