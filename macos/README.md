@@ -51,20 +51,20 @@ pip3 install pyobjc-framework-Cocoa pyobjc-framework-WebKit
 
 After a successful build, you'll find:
 
-- **Executable**: `macos/dist/EncoderUploader` (~15-20MB)
+- **Executable**: `macos/dist/StreamerUploader` (~15-20MB)
 - **Data Directory**: `macos/dist/encoderData/` (application data folder)
 
 ## Distribution
 
 ### For End Users
 1. Copy the entire `dist/` folder to the target macOS system
-2. Run the application: `./EncoderUploader`
+2. Run the application: `./StreamerUploader`
 3. **First Run**: You may need to right-click and select "Open" to bypass Gatekeeper
 
 ### Package Contents
 ```
 dist/
-├── EncoderUploader          # Main executable
+├── StreamerUploader          # Main executable
 └── encoderData/             # Data directory
     └── recordings/
         └── broadcast/       # Recording files location
@@ -76,10 +76,10 @@ For distribution, you may want to code sign the executable:
 
 ```bash
 # Self-signed (for testing)
-codesign --force --deep --sign - dist/EncoderUploader
+codesign --force --deep --sign - dist/StreamerUploader
 
 # With developer certificate (for distribution)
-codesign --force --deep --sign "Developer ID Application: Your Name" dist/EncoderUploader
+codesign --force --deep --sign "Developer ID Application: Your Name" dist/StreamerUploader
 ```
 
 ## Runtime Requirements
@@ -107,12 +107,12 @@ The built executable includes all Python dependencies and should run on macOS sy
 
 ### Runtime Issues
 
-**"EncoderUploader cannot be opened because it is from an unidentified developer"**
+**"StreamerUploader cannot be opened because it is from an unidentified developer"**
 - Right-click the executable and select "Open"
 - Or go to System Preferences → Security & Privacy → Allow anyway
 
 **"Permission denied"**
-- Make executable: `chmod +x EncoderUploader`
+- Make executable: `chmod +x StreamerUploader`
 - Check directory permissions for `encoderData/`
 
 **"Port already in use"**
@@ -133,7 +133,7 @@ The built executable includes all Python dependencies and should run on macOS sy
 ## Technical Notes
 
 ### PyInstaller Configuration
-- Uses `EncoderUploader_onefile.spec` for build configuration
+- Uses `StreamerUploader_onefile.spec` for build configuration
 - Includes Cocoa and WebKit frameworks for native macOS integration
 - Bundles Flask templates and static files
 - Console mode enabled for debugging

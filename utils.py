@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Utility functions for Encoder Uploader
+Utility functions for Streamer Uploader
 """
 
 import os
