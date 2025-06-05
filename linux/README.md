@@ -46,7 +46,7 @@ sudo dnf install python3 python3-pip python3-gobject gtk3-devel webkit2gtk3-deve
 After a successful build, you'll find:
 
 - **Executable**: `linux/dist/StreamerUploader` (~15-20MB)
-- **Data Directory**: `linux/dist/encoderData/` (application data folder)
+- **Data Directory**: `linux/dist/streamerData/` (application data folder)
 
 ## Distribution
 
@@ -59,7 +59,7 @@ After a successful build, you'll find:
 ```
 dist/
 ├── StreamerUploader          # Main executable
-└── encoderData/             # Data directory
+└── streamerData/             # Data directory
     └── recordings/
         └── broadcast/       # Recording files location
 ```
@@ -93,7 +93,7 @@ The built executable includes all Python dependencies and should run on most Lin
 
 **"Permission denied"**
 - Make executable: `chmod +x StreamerUploader`
-- Check directory permissions for `encoderData/`
+- Check directory permissions for `streamerData/`
 
 **"Port already in use"**
 - Application will automatically try ports 5000-5009

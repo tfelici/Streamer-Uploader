@@ -106,7 +106,7 @@ if [ -f "dist/StreamerUploader" ]; then
     # Create data directory structure
     echo ""
     echo "📂 Creating data directory structure..."
-    mkdir -p dist/encoderData/recordings/broadcast
+    mkdir -p dist/streamerData/recordings/broadcast
     echo "✅ Directory structure created"
     
     # Optional: Code signing (commented out - requires developer certificate)

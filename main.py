@@ -46,12 +46,12 @@ else:
     # Running as script
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-ENCODER_DATA_DIR = os.path.join(BASE_DIR, 'encoderData')
-RECORDINGS_DIR = os.path.join(ENCODER_DATA_DIR, 'recordings', 'broadcast')
-SETTINGS_FILE = os.path.join(ENCODER_DATA_DIR, 'settings.json')
+STREAMER_DATA_DIR = os.path.join(BASE_DIR, 'streamerData')
+RECORDINGS_DIR = os.path.join(STREAMER_DATA_DIR, 'recordings', 'broadcast')
+SETTINGS_FILE = os.path.join(STREAMER_DATA_DIR, 'settings.json')
 
 # Create directories if they don't exist
-os.makedirs(ENCODER_DATA_DIR, exist_ok=True)
+os.makedirs(STREAMER_DATA_DIR, exist_ok=True)
 os.makedirs(RECORDINGS_DIR, exist_ok=True)
 
 def load_settings():

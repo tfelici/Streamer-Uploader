@@ -52,7 +52,7 @@ pip3 install pyobjc-framework-Cocoa pyobjc-framework-WebKit
 After a successful build, you'll find:
 
 - **Executable**: `macos/dist/StreamerUploader` (~15-20MB)
-- **Data Directory**: `macos/dist/encoderData/` (application data folder)
+- **Data Directory**: `macos/dist/streamerData/` (application data folder)
 
 ## Distribution
 
@@ -65,7 +65,7 @@ After a successful build, you'll find:
 ```
 dist/
 ├── StreamerUploader          # Main executable
-└── encoderData/             # Data directory
+└── streamerData/             # Data directory
     └── recordings/
         └── broadcast/       # Recording files location
 ```
@@ -113,7 +113,7 @@ The built executable includes all Python dependencies and should run on macOS sy
 
 **"Permission denied"**
 - Make executable: `chmod +x StreamerUploader`
-- Check directory permissions for `encoderData/`
+- Check directory permissions for `streamerData/`
 
 **"Port already in use"**
 - Application will automatically try ports 5000-5009

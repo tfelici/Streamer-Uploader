@@ -32,7 +32,7 @@ Run `build_standalone.bat` to create a single-file executable.
 ```
 dist/
 ├── StreamerUploader.exe (single standalone executable ~50MB)
-└── encoderData/
+└── streamerData/
     └── recordings/
         └── broadcast/
 ```

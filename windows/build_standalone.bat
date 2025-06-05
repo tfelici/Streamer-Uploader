@@ -60,9 +60,9 @@ if %errorlevel% neq 0 (
 REM Create directory structure for distribution
 echo Setting up distribution structure...
 if not exist "dist" mkdir "dist"
-if not exist "dist\encoderData" mkdir "dist\encoderData"
-if not exist "dist\encoderData\recordings" mkdir "dist\encoderData\recordings"
-if not exist "dist\encoderData\recordings\broadcast" mkdir "dist\encoderData\recordings\broadcast"
+if not exist "dist\streamerData" mkdir "dist\streamerData"
+if not exist "dist\streamerData\recordings" mkdir "dist\streamerData\recordings"
+if not exist "dist\streamerData\recordings\broadcast" mkdir "dist\streamerData\recordings\broadcast"
 
 REM Check if the standalone executable was created successfully
 if not exist "dist\StreamerUploader_Standalone.exe" (
@@ -76,10 +76,10 @@ REM Move the standalone executable to dist folder
 move "dist\StreamerUploader_Standalone.exe" "dist\StreamerUploader.exe"
 
 REM Copy existing settings if they exist
-if exist "..\encoderData\settings.json" copy "..\encoderData\settings.json" "dist\encoderData\settings.json"
+if exist "..\streamerData\settings.json" copy "..\streamerData\settings.json" "dist\streamerData\settings.json"
 
 REM Copy existing recordings if they exist
-if exist "..\encoderData\recordings\broadcast\*.mp4" copy "..\encoderData\recordings\broadcast\*.mp4" "dist\encoderData\recordings\broadcast\"
+if exist "..\streamerData\recordings\broadcast\*.mp4" copy "..\streamerData\recordings\broadcast\*.mp4" "dist\streamerData\recordings\broadcast\"
 
 REM Create a release package (ZIP file for easy distribution)
 echo Creating release package...
@@ -104,7 +104,7 @@ echo - Safe file removal for USB drives
 echo - Video duration detection with pymediainfo
 echo - All dependencies bundled (Flask, requests, pywebview, etc.)
 echo.
-echo The 'encoderData' folder structure is already set up.
+echo The 'streamerData' folder structure is already set up.
 echo Settings and recordings will be preserved if they exist.
 echo.
 echo To test the build:

@@ -103,7 +103,7 @@ Streamer Uploader/
 │   ├── version_info.txt      # Windows executable metadata
 │   └── dist/                 # Built executable (after building)
 │       ├── StreamerUploader.exe  # Windows executable
-│       └── encoderData/      # Data directory structure
+│       └── streamerData/      # Data directory structure
 ├── linux/                    # Linux build files
 │   ├── StreamerUploader_onefile.spec  # PyInstaller configuration
 │   ├── build_standalone.sh   # Build script
@@ -116,7 +116,7 @@ Streamer Uploader/
 │   └── index.html            # Web interface template
 ├── static/
 │   └── style.css            # Stylesheet
-└── encoderData/
+└── streamerData/
     ├── settings.json        # Application settings
     └── recordings/
         └── broadcast/       # Recording files location
@@ -124,7 +124,7 @@ Streamer Uploader/
 
 ## Configuration
 
-The application creates an `encoderData` folder in the same directory as the executable containing:
+The application creates a `streamerData` folder in the same directory as the executable containing:
 
 - **settings.json**: Upload server URL configuration
 - **recordings/broadcast/**: Location for MP4 recording files
@@ -191,7 +191,7 @@ The application automatically checks the upload server for overlapping files:
 ### Runtime Issues
 
 **"Application won't start"**
-- Ensure `encoderData` folder exists in same directory as executable
+- Ensure `streamerData` folder exists in same directory as executable
 - Check Windows Defender/antivirus isn't blocking the executable
 - Try running as administrator
 - Check console output for port assignment message
@@ -207,7 +207,7 @@ The application automatically checks the upload server for overlapping files:
 - Ensure server accepts the authentication key
 
 **"Files not visible"**
-- Check `encoderData/recordings/broadcast/` folder exists
+- Check `streamerData/recordings/broadcast/` folder exists
 - Ensure MP4 files are in the correct directory
 - Verify file permissions
 
