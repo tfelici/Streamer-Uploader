@@ -65,7 +65,7 @@ if not exist "dist\encoderData\recordings" mkdir "dist\encoderData\recordings"
 if not exist "dist\encoderData\recordings\broadcast" mkdir "dist\encoderData\recordings\broadcast"
 
 REM Check if the standalone executable was created successfully
-if not exist "dist\EncoderUploader_Standalone.exe" (
+if not exist "dist\StreamerUploader_Standalone.exe" (
     echo ERROR: Standalone executable was not created successfully
     echo Please check the PyInstaller output above for errors
     pause
@@ -73,7 +73,7 @@ if not exist "dist\EncoderUploader_Standalone.exe" (
 )
 
 REM Move the standalone executable to dist folder
-move "dist\EncoderUploader_Standalone.exe" "dist\EncoderUploader.exe"
+move "dist\StreamerUploader_Standalone.exe" "dist\StreamerUploader.exe"
 
 REM Copy existing settings if they exist
 if exist "..\encoderData\settings.json" copy "..\encoderData\settings.json" "dist\encoderData\settings.json"
@@ -83,7 +83,7 @@ if exist "..\encoderData\recordings\broadcast\*.mp4" copy "..\encoderData\record
 
 REM Create a release package (ZIP file for easy distribution)
 echo Creating release package...
-powershell -Command "Compress-Archive -Path 'dist' -DestinationPath 'EncoderUploader_Windows.zip' -Force"
+powershell -Command "Compress-Archive -Path 'dist' -DestinationPath 'StreamerUploader_Windows.zip' -Force"
 
 echo.
 echo ====================================================================
@@ -91,8 +91,8 @@ echo BUILD COMPLETED SUCCESSFULLY!
 echo ====================================================================
 echo.
 echo Standalone executable created:
-echo Location: windows\dist\EncoderUploader.exe
-echo Release Package: windows\EncoderUploader_Windows.zip (ready for distribution)
+echo Location: windows\dist\StreamerUploader.exe
+echo Release Package: windows\StreamerUploader_Windows.zip (ready for distribution)
 echo.
 echo Features included:
 echo - Self-contained single executable (no Python required)
@@ -109,7 +109,7 @@ echo Settings and recordings will be preserved if they exist.
 echo.
 echo To test the build:
 echo 1. Navigate to the 'dist' folder
-echo 2. Run 'EncoderUploader.exe'
+echo 2. Run 'StreamerUploader.exe'
 echo 3. Configure upload URL in settings
 echo 4. Test upload functionality
 echo.
