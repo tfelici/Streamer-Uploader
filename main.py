@@ -19,6 +19,12 @@ import requests
 import uuid
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 
+# Use pymediainfo for fast video duration extraction
+try:
+    from pymediainfo import MediaInfo
+except ImportError:
+    MediaInfo = None
+
 # Add the current directory to Python path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -69,24 +75,52 @@ def save_settings(settings):
         print(f"Error saving settings: {e}")
         return False
 
+def get_video_duration_mediainfo(path):
+    """Get video duration using pymediainfo library"""
+    if MediaInfo is None:
+        return None
+    try:
+        media_info = MediaInfo.parse(path)
+        for track in media_info.tracks:
+            if track.track_type == 'Video' and track.duration:
+                return track.duration / 1000.0  # ms to seconds
+        # fallback: try general track
+        for track in media_info.tracks:
+            if track.track_type == 'General' and track.duration:
+                return track.duration / 1000.0
+    except Exception:
+        pass
+    return None
+
 def get_recording_files():
     """Get list of recording files from the recordings directory"""
     files = []
     if os.path.exists(RECORDINGS_DIR):
-        for filename in os.listdir(RECORDINGS_DIR):
-            if filename.endswith('.mp4'):
-                file_path = os.path.join(RECORDINGS_DIR, filename)
-                try:
-                    size = os.path.getsize(file_path)
-                    files.append({
-                        'path': file_path,
-                        'name': filename,
-                        'size': size,
-                        'location': RECORDINGS_DIR,
-                        'active': False  # No active recordings in uploader
-                    })
-                except OSError:
-                    continue
+        file_list = [f for f in os.listdir(RECORDINGS_DIR) if f.endswith('.mp4')]
+        # Sort by modification time, newest first
+        file_list.sort(key=lambda f: os.path.getmtime(os.path.join(RECORDINGS_DIR, f)), reverse=True)
+        
+        for filename in file_list:
+            file_path = os.path.join(RECORDINGS_DIR, filename)
+            try:
+                size = os.path.getsize(file_path)
+                duration = get_video_duration_mediainfo(file_path)
+                
+                # Extract timestamp from filename if possible (format: timestamp.mp4)
+                m = re.match(r'^(\d+)\.mp4$', filename)
+                timestamp = int(m.group(1)) if m else None
+                
+                files.append({
+                    'path': file_path,
+                    'name': filename,
+                    'size': size,
+                    'location': 'Local',
+                    'active': False,  # No active recordings in uploader
+                    'duration': duration,
+                    'timestamp': timestamp
+                })
+            except OSError:
+                continue
     return files
 
 @app.template_filter('datetimeformat')
@@ -106,14 +140,15 @@ def durationformat(value):
     if value is None:
         return ""
     try:
-        duration = float(value)
-        hours = int(duration // 3600)
-        minutes = int((duration % 3600) // 60)
-        seconds = int(duration % 60)
-        if hours > 0:
-            return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+        seconds = float(value)
+        seconds = int(round(seconds))
+        h = seconds // 3600
+        m = (seconds % 3600) // 60
+        s = seconds % 60
+        if h > 0:
+            return f"{h}:{m:02}:{s:02}"
         else:
-            return f"{minutes:02d}:{seconds:02d}"
+            return f"{m}:{s:02}"
     except:
         return str(value)
 
@@ -130,36 +165,6 @@ def filesizeformat(num_bytes):
         return f"{num_bytes:.1f} TB"
     except:
         return str(num_bytes)
-
-@app.template_filter('parse_recording_filename')
-def parse_recording_filename(filename):
-    """Parse recording filename to extract timestamp and duration"""
-    if not filename:
-        return None
-    
-    # Extract just the filename from the full path
-    basename = os.path.basename(filename)
-    
-    # Pattern: timestamp-duration.mp4 or timestampduration.mp4
-    patterns = [
-        r'(\d+)d(\d+(?:\.\d+)?)\.mp4$',  # timestampduration.mp4
-        r'(\d+)\-(\d+(?:\.\d+)?)\.mp4$'  # timestamp-duration.mp4
-    ]
-    
-    for pattern in patterns:
-        match = re.search(pattern, basename)
-        if match:
-            try:
-                timestamp = int(match.group(1))
-                duration = float(match.group(2))
-                return {
-                    'timestamp': timestamp,
-                    'duration': duration
-                }
-            except ValueError:
-                continue
-    
-    return None
 
 @app.route('/')
 def index():

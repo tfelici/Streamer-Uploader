@@ -24,22 +24,16 @@
             <h2>Upload Recordings</h2>
             <form id="upload-form">
                 <div class="file-list">
-                    {% if recording_files %}
-                    {% for file in recording_files if not file.active %}
+                    {% if recording_files %}                    {% for file in recording_files if not file.active %}
                     <div class="file-item">
                         <input type="checkbox" class="upload-checkbox file-checkbox" id="recfile{{ loop.index }}"
                             name="recording_files" value="{{ file.path }}" checked>
                         <label for="recfile{{ loop.index }}" class="file-info"
-                            data-info='{{ file.path|parse_recording_filename|tojson|safe }}'>
-                            {% set info = file.path|parse_recording_filename %}
-                            {% if info %}
-                            <strong>Timestamp:</strong> {{ info.timestamp | datetimeformat }}<br>
-                            <strong>Duration:</strong> {{ info.duration | durationformat }}<br>
-                            <strong>Size:</strong> {{ file.size | filesizeformat }}
-                            {% else %}
-                            <strong>File:</strong> {{ file.path }}<br>
-                            <strong>Size:</strong> {{ file.size | filesizeformat }}
-                            {% endif %}
+                            data-info='{{ {'timestamp': file.timestamp, 'duration': file.duration}|tojson|safe }}'>
+                            <strong>Timestamp:</strong> {{ file.timestamp | datetimeformat }}<br>
+                            <strong>Duration:</strong> {{ file.duration | durationformat }}<br>
+                            <strong>Size:</strong> {{ file.size | filesizeformat }}<br>
+                            <strong>Location:</strong> {{ file.location }}
                         </label>
                     </div>
                     {% endfor %}
@@ -338,15 +332,14 @@
                 } catch (e) {
                     return '';
                 }
-            }
-
-            async function fetchOverlappingInfo(uploadUrl, file) {
+            }            async function fetchOverlappingInfo(uploadUrl, file, duration) {
                 if (!uploadUrl) return null;
                 // Handle both Windows and Unix path separators
                 const filename = file.split(/[/\\]/).pop();
                 let url = new URL(uploadUrl);
                 url.searchParams.set('command', 'getrecordingsinfo');
                 url.searchParams.set('videofilename', filename);
+                url.searchParams.set('duration', duration);
                 try {
                     const response = await fetch(url, { method: 'GET' });
                     if (!response.ok) throw new Error('Network response was not ok. URL: ' + url.toString());
@@ -368,18 +361,18 @@
                     const loadingDiv = document.createElement('div');
                     loadingDiv.style.fontSize = '0.9em';
                     loadingDiv.style.color = '#888';
-                    loadingDiv.textContent = 'Checking server for overlapping files...';
-                    label.appendChild(loadingDiv);
-
-                    const info = await fetchOverlappingInfo(uploadUrl, file);
-                    loadingDiv.remove();
+                    loadingDiv.textContent = 'Checking server for overlapping files...';                    label.appendChild(loadingDiv);
 
                     let localInfo = null;
                     try {
                         localInfo = JSON.parse(label.getAttribute('data-info'));
                     } catch (e) { }
 
-                    if (info && info.overlapping_files && info.overlapping_files.length > 0 && localInfo) {
+                    if (localInfo && localInfo.duration) {
+                        const info = await fetchOverlappingInfo(uploadUrl, file, localInfo.duration);
+                        loadingDiv.remove();
+
+                        if (info && info.overlapping_files && info.overlapping_files.length > 0) {
                         const barWidth = 220;
                         const barHeight = 18;
                         const barColor = "#eee";
@@ -432,8 +425,7 @@
                         ).join('<br>');
                         const textDiv = document.createElement('div');
                         textDiv.innerHTML = overlaps;
-                        div.appendChild(textDiv);
-                        label.appendChild(div);
+                        div.appendChild(textDiv);                        label.appendChild(div);
                     } else if (info && info.error) {
                         const div = document.createElement('div');
                         div.style.fontSize = '0.9em';
@@ -446,6 +438,10 @@
                         div.style.color = '#080';
                         div.textContent = 'No overlapping files on server.';
                         label.appendChild(div);
+                    }
+                    } else {
+                        // If no duration info available, just remove loading message
+                        loadingDiv.remove();
                     }
                 }
             })();
