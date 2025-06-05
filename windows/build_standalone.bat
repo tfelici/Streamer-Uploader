@@ -1,5 +1,5 @@
 @echo off
-echo Building Encoder Uploader Standalone Executable...
+echo Building Streamer Uploader Standalone Executable...
 echo.
 
 REM Check if Python is installed
@@ -42,8 +42,8 @@ echo.
 
 REM Build the standalone executable
 echo Building standalone executable with PyInstaller...
-echo Command: python -m PyInstaller EncoderUploader_onefile.spec
-python -m PyInstaller EncoderUploader_onefile.spec
+echo Command: python -m PyInstaller StreamerUploader_onefile.spec
+python -m PyInstaller StreamerUploader_onefile.spec
 if %errorlevel% neq 0 (
     echo ERROR: PyInstaller build failed
     echo.

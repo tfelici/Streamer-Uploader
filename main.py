@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Encoder Uploader - Standalone Upload Recordings App with Integrated Viewer
-Replicates only the "Upload Recordings" panel from RPI Encoder app.py
+Streamer Uploader - Standalone Upload Recordings App with Integrated Viewer
+Replicates only the "Upload Recordings" panel from RPI Streamer app.py
 """
 
 import webview
@@ -405,7 +405,7 @@ def start_flask_server(port):
 
 def main():
     """Main function to start the application"""
-    print("Starting Encoder Uploader...")
+    print("Starting Streamer Uploader...")
     
     # Find available port
     port = find_available_port()
@@ -424,7 +424,7 @@ def main():
     time.sleep(2)
     
     # Create webview window
-    window_title = "Encoder Uploader"
+    window_title = "Streamer Uploader"
     window_url = f"http://127.0.0.1:{port}"
     
     print(f"Opening web viewer: {window_url}")

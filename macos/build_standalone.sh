@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Encoder Uploader macOS Build Script
+# Streamer Uploader macOS Build Script
 # Creates a standalone executable for macOS systems
 
 echo "==========================================="
-echo "  Encoder Uploader - macOS Build Script"
+echo "  Streamer Uploader - macOS Build Script"
 echo "==========================================="
 echo ""
 
@@ -86,7 +86,7 @@ echo ""
 echo "🔨 Building standalone executable..."
 echo "   This may take a few minutes..."
 
-pyinstaller EncoderUploader_onefile.spec
+pyinstaller StreamerUploader_onefile.spec
 
 # Check if build was successful
 if [ -f "dist/EncoderUploader" ]; then

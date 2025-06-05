@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Encoder Uploader Linux Build Script
+# Streamer Uploader Linux Build Script
 # Creates a standalone executable for Linux systems
 
 echo "==========================================="
-echo "  Encoder Uploader - Linux Build Script"
+echo "  Streamer Uploader - Linux Build Script"
 echo "==========================================="
 echo ""
 
@@ -69,7 +69,7 @@ echo ""
 echo "🔨 Building standalone executable..."
 echo "   This may take a few minutes..."
 
-pyinstaller EncoderUploader_onefile.spec
+pyinstaller StreamerUploader_onefile.spec
 
 # Check if build was successful
 if [ -f "dist/EncoderUploader" ]; then

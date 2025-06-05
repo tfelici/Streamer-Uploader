@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 """
-PyInstaller spec file for Linux standalone executable
+PyInstaller spec file for macOS standalone executable
 Creates a single-file executable with all dependencies bundled
 """
 
@@ -30,8 +30,8 @@ a = Analysis(
     datas=datas,
     hiddenimports=[
         'webview',
-        'webview.platforms.gtk',
-        'webview.platforms.qt', 
+        'webview.platforms.cocoa',
+        'webview.platforms.qt',
         'webview.platforms.cef',
         'flask',
         'flask.templating',
@@ -55,7 +55,11 @@ a = Analysis(
         'time',
         'os',
         'sys',
-        'subprocess'
+        'subprocess',
+        'objc',
+        'Foundation',
+        'AppKit',
+        'WebKit'
     ] + webview_modules,
     hookspath=[],
     hooksconfig={},
@@ -72,7 +76,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='EncoderUploader',
+    name='StreamerUploader',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

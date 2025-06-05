@@ -1,6 +1,6 @@
-# Encoder Uploader - Standalone Windows Application
+# Streamer Uploader - Standalone Windows Application
 
-A standalone Windows application that replicates the "Upload Recordings" functionality from the RPI Encoder app, packaged as a single executable with integrated web viewer.
+A standalone Windows application that replicates the "Upload Recordings" functionality from the RPI Streamer app, packaged as a single executable with integrated web viewer.
 
 ## Features
 

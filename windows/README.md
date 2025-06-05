@@ -1,6 +1,6 @@
 # Windows Standalone Executable Build
 
-This directory contains the files needed to build a standalone Windows executable for the Encoder Uploader application.
+This directory contains the files needed to build a standalone Windows executable for the Streamer Uploader application.
 
 ## Quick Start
 

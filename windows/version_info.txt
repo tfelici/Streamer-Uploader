@@ -29,13 +29,12 @@ VSVersionInfo(
       [
       StringTable(
         u'040904B0',
-        [StringStruct(u'CompanyName', u''),
-        StringStruct(u'FileDescription', u'Encoder Uploader - Standalone Recording Upload Application'),
+        [StringStruct(u'CompanyName', u''),        StringStruct(u'FileDescription', u'Streamer Uploader - Standalone Recording Upload Application'),
         StringStruct(u'FileVersion', u'1.0.0.0'),
-        StringStruct(u'InternalName', u'EncoderUploader'),
+        StringStruct(u'InternalName', u'StreamerUploader'),
         StringStruct(u'LegalCopyright', u''),
-        StringStruct(u'OriginalFilename', u'EncoderUploader.exe'),
-        StringStruct(u'ProductName', u'Encoder Uploader'),
+        StringStruct(u'OriginalFilename', u'StreamerUploader.exe'),
+        StringStruct(u'ProductName', u'Streamer Uploader'),
         StringStruct(u'ProductVersion', u'1.0.0.0')])
       ]), 
     VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
