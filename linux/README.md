@@ -1,6 +1,6 @@
 # Linux Build Instructions
 
-This directory contains build files for creating a standalone Linux executable of the Encoder Uploader application.
+This directory contains build files for creating a standalone Linux executable of the Streamer Uploader application.
 
 ## Prerequisites
 

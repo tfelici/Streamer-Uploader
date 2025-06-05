@@ -1,12 +1,12 @@
 # Windows executables
 *.exe filter=lfs diff=lfs merge=lfs -text
-windows/dist/EncoderUploader.exe filter=lfs diff=lfs merge=lfs -text
+windows/dist/StreamerUploader.exe filter=lfs diff=lfs merge=lfs -text
 
 # Linux executables (no extension)
-linux/dist/EncoderUploader filter=lfs diff=lfs merge=lfs -text
+linux/dist/StreamerUploader filter=lfs diff=lfs merge=lfs -text
 
 # macOS executables (no extension)
-macos/dist/EncoderUploader filter=lfs diff=lfs merge=lfs -text
+macos/dist/StreamerUploader filter=lfs diff=lfs merge=lfs -text
 
 # Alternative: Track all executables in dist directories
-# dist/**/EncoderUploader filter=lfs diff=lfs merge=lfs -text
+# dist/**/StreamerUploader filter=lfs diff=lfs merge=lfs -text

@@ -72,18 +72,18 @@ echo "   This may take a few minutes..."
 pyinstaller StreamerUploader_onefile.spec
 
 # Check if build was successful
-if [ -f "dist/EncoderUploader" ]; then
+if [ -f "dist/StreamerUploader" ]; then
     echo ""
     echo "✅ BUILD SUCCESSFUL!"
     echo ""
-    echo "📁 Output location: linux/dist/EncoderUploader"
+    echo "📁 Output location: linux/dist/StreamerUploader"
     
     # Get file size
-    file_size=$(du -h dist/EncoderUploader | cut -f1)
+    file_size=$(du -h dist/StreamerUploader | cut -f1)
     echo "📏 File size: $file_size"
     
     # Make executable
-    chmod +x dist/EncoderUploader
+    chmod +x dist/StreamerUploader
     echo "✅ Executable permissions set"
     
     # Create data directory structure
@@ -97,7 +97,7 @@ if [ -f "dist/EncoderUploader" ]; then
     echo ""
     echo "📋 Next steps:"
     echo "   1. Copy the entire 'dist/' folder to your target Linux system"
-    echo "   2. Run: ./EncoderUploader"
+    echo "   2. Run: ./StreamerUploader"
     echo "   3. Configure your upload server URL in Settings"
     echo ""
     echo "💡 The executable includes all dependencies and can run on"

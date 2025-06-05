@@ -1,6 +1,6 @@
 # macOS Build Instructions
 
-This directory contains build files for creating a standalone macOS executable of the Encoder Uploader application.
+This directory contains build files for creating a standalone macOS executable of the Streamer Uploader application.
 
 ## Prerequisites
 
