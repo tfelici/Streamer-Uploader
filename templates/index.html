@@ -28,7 +28,7 @@
                     <div class="file-item">
                         <input type="checkbox" class="upload-checkbox file-checkbox" id="recfile{{ loop.index }}"
                             name="recording_files" value="{{ file.path }}" checked> <label for="recfile{{ loop.index }}"
-                            class="file-info" data-info='{{ {' timestamp': file.timestamp, 'duration' :
+                            class="file-info" data-info='{{ {'timestamp': file.timestamp, 'duration' :
                             file.duration}|tojson|safe }}'>
                             <strong>Timestamp:</strong> {{ file.timestamp | datetimeformat }}<br>
                             <strong>Duration:</strong> {{ file.duration | durationformat }}<br>
