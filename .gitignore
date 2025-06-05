@@ -59,11 +59,7 @@ windows/build/
 linux/build/
 macos/build/
 
-# Distribution directories (build artifacts)
-dist/
-windows/dist/
-linux/dist/
-macos/dist/
+# Distribution directories (build artifacts) - removed to allow exe files
 
 # Exclude release packages (zip files)
 *.zip
