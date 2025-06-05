@@ -28,6 +28,8 @@ except ImportError:
 # Add the current directory to Python path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from utils import safe_remove_file
+
 app = Flask(__name__)
 
 # Global dictionary to track upload progress and allow cancellation
@@ -273,12 +275,10 @@ def upload_recording():
                 
                 upload_progress[upload_id]['status'] = 'completed'
                 upload_progress[upload_id]['progress'] = 100
-                upload_progress[upload_id]['result'] = result
-                
-                # If upload succeeded and no error, delete the original file
+                upload_progress[upload_id]['result'] = result                # If upload succeeded and no error, delete the original file
                 if result.get('error') == '':
                     try:
-                        os.remove(file_path)
+                        safe_remove_file(file_path)
                     except Exception:
                         pass  # Ignore deletion errors
                         
@@ -375,8 +375,10 @@ def delete_recording():
     if not file_path or not os.path.isfile(file_path):
         return jsonify({'error': 'Recording file not found.'}), 400
     try:
-        os.remove(file_path)
-        return jsonify({'success': True})
+        if safe_remove_file(file_path):
+            return jsonify({'success': True})
+        else:
+            return jsonify({'error': 'Failed to delete file'}), 500
     except Exception as e:
         return jsonify({'error': f'Failed to delete: {e}'}), 500
 
@@ -426,7 +428,6 @@ def main():
     window_url = f"http://127.0.0.1:{port}"
     
     print(f"Opening web viewer: {window_url}")
-    
     # Create and start webview
     webview.create_window(
         window_title, 

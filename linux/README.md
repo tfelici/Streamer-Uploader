@@ -1,56 +1,120 @@
 # Linux Build Instructions
 
-This directory contains the Linux build configuration for EncoderUploader.
+This directory contains build files for creating a standalone Linux executable of the Encoder Uploader application.
 
 ## Prerequisites
 
-- Python 3.7+
-- pip package manager
-- Linux environment (Ubuntu, CentOS, etc.)
+### System Requirements
+- Linux distribution (Ubuntu 18.04+, CentOS 7+, or equivalent)
+- Python 3.7 or higher
+- pip3 package manager
 
-## Build Process
+### System Dependencies
 
-1. **Navigate to linux directory**:
+**Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install python3 python3-pip python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.2-webkit2-4.0
+```
+
+**CentOS/RHEL/Fedora:**
+```bash
+sudo yum install python3 python3-pip python3-gobject gtk3-devel webkit2gtk3-devel
+# OR for newer versions:
+sudo dnf install python3 python3-pip python3-gobject gtk3-devel webkit2gtk3-devel
+```
+
+## Building the Executable
+
+1. **Navigate to the linux directory:**
    ```bash
    cd linux/
    ```
 
-2. **Make build script executable**:
+2. **Make the build script executable:**
    ```bash
-   chmod +x build_executable.sh
+   chmod +x build_standalone.sh
    ```
 
-3. **Run build script**:
+3. **Run the build script:**
    ```bash
-   ./build_executable.sh
+   ./build_standalone.sh
    ```
 
-   Or manually:
-   ```bash
-   pip install -r ../requirements.txt
-   pyinstaller EncoderUploader_linux.spec
-   ```
+## Build Output
 
-4. **Find executable**:
-   - Output: `linux/dist/EncoderUploader`
-   - Size: ~15-20MB (standalone)
+After a successful build, you'll find:
 
-## Files
+- **Executable**: `linux/dist/EncoderUploader` (~15-20MB)
+- **Data Directory**: `linux/dist/encoderData/` (application data folder)
 
-- `EncoderUploader_linux.spec` - PyInstaller configuration
-- `build_executable.sh` - Automated build script
-- `dist/EncoderUploader` - Generated executable (after build)
+## Distribution
 
-## Features
+### For End Users
+1. Copy the entire `dist/` folder to the target Linux system
+2. Make sure the executable has run permissions: `chmod +x EncoderUploader`
+3. Run the application: `./EncoderUploader`
 
-✓ Standalone Linux executable  
-✓ No external dependencies required  
-✓ Real-time upload progress tracking  
-✓ Integrated web viewer  
-✓ Cross-platform compatibility  
-
-## Download URL (when available)
-
+### Package Contents
 ```
-https://github.com/tfelici/Encoder-Uploader/raw/main/linux/dist/EncoderUploader
+dist/
+├── EncoderUploader          # Main executable
+└── encoderData/             # Data directory
+    └── recordings/
+        └── broadcast/       # Recording files location
 ```
+
+## Runtime Requirements
+
+The built executable includes all Python dependencies and should run on most Linux systems without additional installation. However, the target system needs:
+
+- GTK 3.0 libraries (usually pre-installed)
+- WebKit2GTK libraries (for the web interface)
+- Standard C libraries
+
+## Troubleshooting
+
+### Build Issues
+
+**"Command not found: python3"**
+- Install Python 3: `sudo apt-get install python3` (Ubuntu) or `sudo yum install python3` (CentOS)
+
+**"No module named 'gi'"**
+- Install GObject Introspection: `sudo apt-get install python3-gi`
+
+**"WebKit2 not found"**
+- Install WebKit: `sudo apt-get install gir1.2-webkit2-4.0`
+
+### Runtime Issues
+
+**"Failed to load webview"**
+- Ensure GTK and WebKit libraries are installed on target system
+- Try installing: `sudo apt-get install libgtk-3-0 libwebkit2gtk-4.0-37`
+
+**"Permission denied"**
+- Make executable: `chmod +x EncoderUploader`
+- Check directory permissions for `encoderData/`
+
+**"Port already in use"**
+- Application will automatically try ports 5000-5009
+- Close other applications using these ports if needed
+
+## Technical Notes
+
+### PyInstaller Configuration
+- Uses `EncoderUploader_onefile.spec` for build configuration
+- Includes all webview backends (GTK, Qt, CEF) for maximum compatibility
+- Bundles Flask templates and static files
+- Console mode enabled for debugging
+
+### Dependencies Included
+- Flask web framework
+- webview (PyGObject backend for Linux)
+- requests and requests-toolbelt
+- pymediainfo for video file analysis
+- All Python standard library modules
+
+### File Size Optimization
+- UPX compression enabled (reduces file size by ~30%)
+- Excludes unnecessary modules and files
+- Single-file executable for easy distribution

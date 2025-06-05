@@ -1,45 +1,47 @@
-# Encoder Uploader - Cross-Platform Application
+# Encoder Uploader - Standalone Windows Application
 
-A standalone application that replicates the "Upload Recordings" functionality from the RPI Encoder app, packaged as platform-specific executables with integrated web viewer.
+A standalone Windows application that replicates the "Upload Recordings" functionality from the RPI Encoder app, packaged as a single executable with integrated web viewer.
 
 ## Features
 
-- **Cross-Platform Support**: Available for Windows, Linux, and macOS
-- **Standalone Executables**: No Python installation required for end users
+- **Standalone Windows Executable**: No Python installation required for end users
 - **Integrated Web Viewer**: Native window with built-in browser (no external browser needed)
 - **Upload Recordings**: Upload MP4 recordings to configured server with real-time progress tracking
-- **Delete Recordings**: Remove recordings from local storage
+- **Delete Recordings**: Remove recordings from local storage with USB-safe file operations
 - **Settings Management**: Configure upload server URL
 - **Overlapping Files Detection**: Visual timeline showing file overlaps on server
 - **Modern UI**: Responsive design with progress bars and status indicators
+- **Safe File Removal**: Proper filesystem syncing for USB drives and external storage
 
 ## Latest Updates
 
-**Upload Progress Fix (June 2025)**
-- ✅ **Fixed Progress Bar Issue**: Progress now accurately tracks server-side upload progress instead of jumping from 0% to 100%
+**Production Ready (June 2025)**
+- ✅ **Single File Executable**: Self-contained ~50MB executable with all dependencies
+- ✅ **USB Drive Support**: Safe file removal with proper filesystem syncing
+- ✅ **Video Duration Detection**: Fast metadata extraction using pymediainfo
 - ✅ **Real-Time Progress**: Shows actual upload progress to remote server with 1-second updates
 - ✅ **Two-Phase Progress**: 
   - Phase 1 (0-20%): Local upload to application
   - Phase 2 (20-100%): Remote upload to configured server
-- ✅ **Better User Experience**: Users can now see the actual upload progress for large files
+- ✅ **Cross-Platform File Operations**: Windows and Unix compatibility
 
 ## Platform Support
 
-### 🪟 Windows
-- **Status**: ✅ **Available** - Ready for production use
-- **Download**: `windows/dist/EncoderUploader_Standalone.exe` (14.4MB)
+### 🖥️ Windows
+- **Status**: ✅ **Ready for Production**
 - **Requirements**: Windows 10 or higher
+- **Build**: See `windows/README.md` for build instructions
 - **Features**: Native Windows executable with integrated webview
 
 ### 🐧 Linux  
 - **Status**: 🔧 **Build Ready** - Spec files and build scripts prepared
-- **Build**: Navigate to `linux/` directory and run `./build_executable.sh`
+- **Build**: Navigate to `linux/` directory and run `./build_standalone.sh`
 - **Output**: `linux/dist/EncoderUploader` (~15-20MB)
 - **Requirements**: Linux environment (Ubuntu, CentOS, etc.)
 
 ### 🍎 macOS
 - **Status**: 🔧 **Build Ready** - Spec files and build scripts prepared  
-- **Build**: Navigate to `macos/` directory and run `./build_executable.sh`
+- **Build**: Navigate to `macos/` directory and run `./build_standalone.sh`
 - **Output**: `macos/dist/EncoderUploader` (~15-20MB)
 - **Requirements**: macOS environment with Xcode Command Line Tools
 
@@ -47,19 +49,16 @@ A standalone application that replicates the "Upload Recordings" functionality f
 
 ## Quick Start
 
-### For End Users (Download Ready-to-Use Executable)
+### For End Users (Ready-to-Use Executable)
 
-**Option 1: Direct Download from Git Repository**
-1. **Download**: The standalone executable is included in this repository at:
-   `windows/dist/EncoderUploader.exe` (14.4MB)
-2. **Download the entire folder**: `windows/dist/`
-3. **Run**: Double-click `EncoderUploader.exe` (no installation required)
-4. **Configure**: Set your upload server URL in Settings
-5. **Use**: Upload or delete recordings as needed
+1. **Download**: Get the standalone executable from the `windows/dist/` folder
+2. **Run**: Double-click `EncoderUploader.exe` (no installation required)
+3. **Configure**: Set your upload server URL in Settings
+4. **Use**: Upload or delete recordings as needed
 
 **Features of the Standalone Executable:**
 - ✅ **No Dependencies**: No Python or other software installation required
-- ✅ **Self-Contained**: All libraries and dependencies bundled (14.4MB)
+- ✅ **Self-Contained**: All libraries and dependencies bundled
 - ✅ **Native Window**: Integrated web browser viewer
 - ✅ **Portable**: Copy to any Windows machine and run immediately
 
@@ -98,16 +97,21 @@ Encoder Uploader/
 ├── main.py                    # Main application with integrated viewer
 ├── requirements.txt           # Python dependencies
 ├── README.md                 # This documentation
-├── BUILD.md                  # Build instructions
 ├── windows/                  # Windows-specific build files
 │   ├── EncoderUploader_onefile.spec  # PyInstaller configuration
 │   ├── build_standalone.bat  # Build script
+│   ├── version_info.txt      # Windows executable metadata
 │   └── dist/                 # Built executable (after building)
 │       ├── EncoderUploader.exe  # Windows executable
-│       ├── encoderData/      # Data directory structure
-│       └── README.md         # Distribution documentation
-├── linux/                    # Linux build files (future)
-├── macos/                    # macOS build files (future)
+│       └── encoderData/      # Data directory structure
+├── linux/                    # Linux build files
+│   ├── EncoderUploader_onefile.spec  # PyInstaller configuration
+│   ├── build_standalone.sh   # Build script
+│   └── README.md             # Linux build documentation
+├── macos/                    # macOS build files
+│   ├── EncoderUploader_onefile.spec  # PyInstaller configuration
+│   ├── build_standalone.sh   # Build script
+│   └── README.md             # macOS build documentation
 ├── templates/
 │   └── index.html            # Web interface template
 ├── static/

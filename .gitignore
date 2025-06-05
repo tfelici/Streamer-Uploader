@@ -59,11 +59,11 @@ windows/build/
 linux/build/
 macos/build/
 
-# Allow distribution directories with final executables
-# These contain the ready-to-distribute binaries
-!windows/dist/
-!linux/dist/
-!macos/dist/
+# Distribution directories (build artifacts)
+dist/
+windows/dist/
+linux/dist/
+macos/dist/
 
 # Exclude release packages (zip files)
 *.zip

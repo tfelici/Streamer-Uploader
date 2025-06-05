@@ -1,34 +1,63 @@
 # Windows Standalone Executable Build
 
-This directory contains the necessary files to build a standalone Windows executable for the Encoder Uploader application.
+This directory contains the files needed to build a standalone Windows executable for the Encoder Uploader application.
 
-## Files Required for Building
+## Quick Start
 
-### Essential Files:
-- `EncoderUploader_onefile.spec` - PyInstaller specification file with optimized dependencies
-- `build_standalone.bat` - Build script to create the standalone executable
+Run `build_standalone.bat` to create a single-file executable.
 
-### Build Process:
+## Build Process
+
+### Prerequisites
+- Python 3.7+ installed and in PATH
+- All dependencies will be installed automatically
+
+### Build Steps
 1. Run `build_standalone.bat`
 2. The script will:
-   - Install required Python packages
+   - Install/upgrade required Python packages
+   - Install/upgrade PyInstaller
    - Clean previous builds
-   - Create standalone executable using PyInstaller
+   - Create standalone executable
    - Set up proper directory structure
-   - Move executable to distribution folder
+   - Copy existing settings and recordings
+   - Create ZIP distribution package
 
-### Output:
-- `dist\EncoderUploader_Standalone\EncoderUploader_Standalone.exe` - Main executable (13.7MB)
-- `dist\EncoderUploader_Standalone\encoderData\` - Data directory structure
-- `dist\EncoderUploader_Standalone\README.md` - Distribution documentation
+### Build Files
+- **`build_standalone.bat`** - Main build script
+- **`EncoderUploader_onefile.spec`** - PyInstaller specification with optimized dependencies
+- **`version_info.txt`** - Windows executable version information
 
-## Features of Standalone Executable:
-- ✅ Self-contained (no Python installation required)
+### Output Structure
+```
+dist/
+├── EncoderUploader.exe (single standalone executable ~50MB)
+└── encoderData/
+    └── recordings/
+        └── broadcast/
+```
+
+### Distribution
+- **Single file**: `dist\EncoderUploader.exe`
+- **ZIP package**: `EncoderUploader_Windows.zip` (ready for distribution)
+
+## Features of Standalone Executable
+- ✅ Self-contained single file (no Python installation required)
 - ✅ No external dependencies
-- ✅ Integrated web browser viewer
-- ✅ Recording upload functionality
+- ✅ Integrated web browser viewer (pywebview)
+- ✅ Recording upload functionality with progress tracking
 - ✅ Settings management
 - ✅ Overlapping files detection
+- ✅ Safe file removal for USB drives
+- ✅ Video duration detection (pymediainfo)
+- ✅ Cross-platform file operations
+- ✅ Proper Windows executable metadata
+
+## Usage
+1. Extract or copy `EncoderUploader.exe` to desired location
+2. Run the executable
+3. Configure upload URL in settings
+4. Upload recordings with progress tracking
 - ✅ All Flask templates and static files bundled
 
 ## Distribution:
