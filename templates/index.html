@@ -24,12 +24,12 @@
             <h2>Upload Recordings</h2>
             <form id="upload-form">
                 <div class="file-list">
-                    {% if recording_files %}                    {% for file in recording_files if not file.active %}
+                    {% if recording_files %} {% for file in recording_files if not file.active %}
                     <div class="file-item">
                         <input type="checkbox" class="upload-checkbox file-checkbox" id="recfile{{ loop.index }}"
                             name="recording_files" value="{{ file.path }}" checked>
-                        <label for="recfile{{ loop.index }}" class="file-info"
-                            data-info='{{ {'timestamp': file.timestamp, 'duration': file.duration}|tojson|safe }}'>
+                        <label for="recfile{{ loop.index }}" class="file-info" data-info='{{ {' timestamp':
+                            file.timestamp, 'duration' : file.duration}|tojson|safe }}'>
                             <strong>Timestamp:</strong> {{ file.timestamp | datetimeformat }}<br>
                             <strong>Duration:</strong> {{ file.duration | durationformat }}<br>
                             <strong>Size:</strong> {{ file.size | filesizeformat }}<br>
@@ -332,7 +332,7 @@
                 } catch (e) {
                     return '';
                 }
-            }            async function fetchOverlappingInfo(uploadUrl, file, duration) {
+            } async function fetchOverlappingInfo(uploadUrl, file, duration) {
                 if (!uploadUrl) return null;
                 // Handle both Windows and Unix path separators
                 const filename = file.split(/[/\\]/).pop();
@@ -361,7 +361,7 @@
                     const loadingDiv = document.createElement('div');
                     loadingDiv.style.fontSize = '0.9em';
                     loadingDiv.style.color = '#888';
-                    loadingDiv.textContent = 'Checking server for overlapping files...';                    label.appendChild(loadingDiv);
+                    loadingDiv.textContent = 'Checking server for overlapping files...'; label.appendChild(loadingDiv);
 
                     let localInfo = null;
                     try {
@@ -373,72 +373,72 @@
                         loadingDiv.remove();
 
                         if (info && info.overlapping_files && info.overlapping_files.length > 0) {
-                        const barWidth = 220;
-                        const barHeight = 18;
-                        const barColor = "#eee";
-                        const borderColor = "#bbb";
-                        const overlapColor = "#d33";
-                        const localStart = Number(localInfo.timestamp);
-                        const localDuration = Number(localInfo.duration);
-                        const localEnd = localStart + localDuration;
+                            const barWidth = 220;
+                            const barHeight = 18;
+                            const barColor = "#eee";
+                            const borderColor = "#bbb";
+                            const overlapColor = "#d33";
+                            const localStart = Number(localInfo.timestamp);
+                            const localDuration = Number(localInfo.duration);
+                            const localEnd = localStart + localDuration;
 
-                        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                        svg.setAttribute("width", barWidth);
-                        svg.setAttribute("height", barHeight);
-                        svg.style.display = "block";
-                        svg.style.margin = "8px 0";
+                            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                            svg.setAttribute("width", barWidth);
+                            svg.setAttribute("height", barHeight);
+                            svg.style.display = "block";
+                            svg.style.margin = "8px 0";
 
-                        const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                        bg.setAttribute("x", 0);
-                        bg.setAttribute("y", 2);
-                        bg.setAttribute("width", barWidth);
-                        bg.setAttribute("height", barHeight - 4);
-                        bg.setAttribute("fill", barColor);
-                        bg.setAttribute("stroke", borderColor);
-                        bg.setAttribute("stroke-width", 1);
-                        svg.appendChild(bg);
+                            const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                            bg.setAttribute("x", 0);
+                            bg.setAttribute("y", 2);
+                            bg.setAttribute("width", barWidth);
+                            bg.setAttribute("height", barHeight - 4);
+                            bg.setAttribute("fill", barColor);
+                            bg.setAttribute("stroke", borderColor);
+                            bg.setAttribute("stroke-width", 1);
+                            svg.appendChild(bg);
 
-                        info.overlapping_files.forEach(f => {
-                            const overlapStart = Math.max(Number(f.timestamp), localStart);
-                            const overlapEnd = Math.min(Number(f.timestamp) + Number(f.duration), localEnd);
-                            if (overlapEnd > overlapStart) {
-                                const x = ((overlapStart - localStart) / localDuration) * barWidth;
-                                const w = ((overlapEnd - overlapStart) / localDuration) * barWidth;
-                                const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                                rect.setAttribute("x", x);
-                                rect.setAttribute("y", 2);
-                                rect.setAttribute("width", w);
-                                rect.setAttribute("height", barHeight - 4);
-                                rect.setAttribute("fill", overlapColor);
-                                rect.setAttribute("opacity", 0.8);
-                                svg.appendChild(rect);
-                            }
-                        });
+                            info.overlapping_files.forEach(f => {
+                                const overlapStart = Math.max(Number(f.timestamp), localStart);
+                                const overlapEnd = Math.min(Number(f.timestamp) + Number(f.duration), localEnd);
+                                if (overlapEnd > overlapStart) {
+                                    const x = ((overlapStart - localStart) / localDuration) * barWidth;
+                                    const w = ((overlapEnd - overlapStart) / localDuration) * barWidth;
+                                    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                                    rect.setAttribute("x", x);
+                                    rect.setAttribute("y", 2);
+                                    rect.setAttribute("width", w);
+                                    rect.setAttribute("height", barHeight - 4);
+                                    rect.setAttribute("fill", overlapColor);
+                                    rect.setAttribute("opacity", 0.8);
+                                    svg.appendChild(rect);
+                                }
+                            });
 
-                        const div = document.createElement('div');
-                        div.style.fontSize = '0.9em';
-                        div.style.color = '#b00';
-                        div.innerHTML = 'Overlapping server files:';
-                        div.appendChild(svg);
-                        const overlaps = info.overlapping_files.map(f =>
-                            `Server file: ${f.timestamp} (${f.duration}s, ${f.size_mb} MB)`
-                        ).join('<br>');
-                        const textDiv = document.createElement('div');
-                        textDiv.innerHTML = overlaps;
-                        div.appendChild(textDiv);                        label.appendChild(div);
-                    } else if (info && info.error) {
-                        const div = document.createElement('div');
-                        div.style.fontSize = '0.9em';
-                        div.style.color = '#b00';
-                        div.textContent = 'Error: ' + info.error;
-                        label.appendChild(div);
-                    } else {
-                        const div = document.createElement('div');
-                        div.style.fontSize = '0.9em';
-                        div.style.color = '#080';
-                        div.textContent = 'No overlapping files on server.';
-                        label.appendChild(div);
-                    }
+                            const div = document.createElement('div');
+                            div.style.fontSize = '0.9em';
+                            div.style.color = '#b00';
+                            div.innerHTML = 'Overlapping server files:';
+                            div.appendChild(svg);
+                            const overlaps = info.overlapping_files.map(f =>
+                                `Server file: ${f.timestamp} (${f.duration}s, ${f.size_mb} MB)`
+                            ).join('<br>');
+                            const textDiv = document.createElement('div');
+                            textDiv.innerHTML = overlaps;
+                            div.appendChild(textDiv); label.appendChild(div);
+                        } else if (info && info.error) {
+                            const div = document.createElement('div');
+                            div.style.fontSize = '0.9em';
+                            div.style.color = '#b00';
+                            div.textContent = 'Error: ' + info.error;
+                            label.appendChild(div);
+                        } else {
+                            const div = document.createElement('div');
+                            div.style.fontSize = '0.9em';
+                            div.style.color = '#080';
+                            div.textContent = 'No overlapping files on server.';
+                            label.appendChild(div);
+                        }
                     } else {
                         // If no duration info available, just remove loading message
                         loadingDiv.remove();

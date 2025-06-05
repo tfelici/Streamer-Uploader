@@ -390,8 +390,8 @@ def is_port_available(port):
     except OSError:
         return False
 
-def find_available_port(start_port=5000, max_port=5100):
-    """Find an available port"""
+def find_available_port(start_port=8080, max_port=8180):
+    """Find an available port - using higher range to avoid conflicts"""
     for port in range(start_port, max_port):
         if is_port_available(port):
             return port
