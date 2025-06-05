@@ -36,13 +36,13 @@ A standalone Windows application that replicates the "Upload Recordings" functio
 ### 🐧 Linux  
 - **Status**: 🔧 **Build Ready** - Spec files and build scripts prepared
 - **Build**: Navigate to `linux/` directory and run `./build_standalone.sh`
-- **Output**: `linux/dist/EncoderUploader` (~15-20MB)
+- **Output**: `linux/dist/StreamerUploader` (~15-20MB)
 - **Requirements**: Linux environment (Ubuntu, CentOS, etc.)
 
 ### 🍎 macOS
 - **Status**: 🔧 **Build Ready** - Spec files and build scripts prepared  
 - **Build**: Navigate to `macos/` directory and run `./build_standalone.sh`
-- **Output**: `macos/dist/EncoderUploader` (~15-20MB)
+- **Output**: `macos/dist/StreamerUploader` (~15-20MB)
 - **Requirements**: macOS environment with Xcode Command Line Tools
 
 *Note: Linux and macOS executables need to be built on their respective platforms. Windows builds are already available.*
@@ -52,7 +52,7 @@ A standalone Windows application that replicates the "Upload Recordings" functio
 ### For End Users (Ready-to-Use Executable)
 
 1. **Download**: Get the standalone executable from the `windows/dist/` folder
-2. **Run**: Double-click `EncoderUploader.exe` (no installation required)
+2. **Run**: Double-click `StreamerUploader.exe` (no installation required)
 3. **Configure**: Set your upload server URL in Settings
 4. **Use**: Upload or delete recordings as needed
 
@@ -81,7 +81,7 @@ A standalone Windows application that replicates the "Upload Recordings" functio
    cd windows
    build_standalone.bat
    ```
-4. **Find Output**: The executable will be in `windows/dist/EncoderUploader_Standalone/`
+4. **Find Output**: The executable will be in `windows/dist/StreamerUploader_Standalone/`
 
 #### Testing Before Building
 
@@ -93,23 +93,23 @@ python main.py
 ## File Structure
 
 ```
-Encoder Uploader/
+Streamer Uploader/
 ├── main.py                    # Main application with integrated viewer
 ├── requirements.txt           # Python dependencies
 ├── README.md                 # This documentation
 ├── windows/                  # Windows-specific build files
-│   ├── EncoderUploader_onefile.spec  # PyInstaller configuration
+│   ├── StreamerUploader_onefile.spec  # PyInstaller configuration
 │   ├── build_standalone.bat  # Build script
 │   ├── version_info.txt      # Windows executable metadata
 │   └── dist/                 # Built executable (after building)
-│       ├── EncoderUploader.exe  # Windows executable
+│       ├── StreamerUploader.exe  # Windows executable
 │       └── encoderData/      # Data directory structure
 ├── linux/                    # Linux build files
-│   ├── EncoderUploader_onefile.spec  # PyInstaller configuration
+│   ├── StreamerUploader_onefile.spec  # PyInstaller configuration
 │   ├── build_standalone.sh   # Build script
 │   └── README.md             # Linux build documentation
 ├── macos/                    # macOS build files
-│   ├── EncoderUploader_onefile.spec  # PyInstaller configuration
+│   ├── StreamerUploader_onefile.spec  # PyInstaller configuration
 │   ├── build_standalone.sh   # Build script
 │   └── README.md             # macOS build documentation
 ├── templates/
@@ -235,8 +235,8 @@ The application automatically checks the upload server for overlapping files:
 1. Create 256x256 pixel PNG/JPG image
 2. Convert to ICO format
 3. Save as `app_icon.ico`
-4. Update `icon='app_icon.ico'` in `windows/EncoderUploader.spec`
+4. Update `icon='app_icon.ico'` in `windows/StreamerUploader.spec`
 
 ## License
 
-This project is part of the RPI Encoder suite. See main project for license details.
+This project is part of the RPI Streamer suite. See main project for license details.

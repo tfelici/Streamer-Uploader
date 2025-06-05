@@ -25,21 +25,21 @@ Run `build_standalone.bat` to create a single-file executable.
 
 ### Build Files
 - **`build_standalone.bat`** - Main build script
-- **`EncoderUploader_onefile.spec`** - PyInstaller specification with optimized dependencies
+- **`StreamerUploader_onefile.spec`** - PyInstaller specification with optimized dependencies
 - **`version_info.txt`** - Windows executable version information
 
 ### Output Structure
 ```
 dist/
-├── EncoderUploader.exe (single standalone executable ~50MB)
+├── StreamerUploader.exe (single standalone executable ~50MB)
 └── encoderData/
     └── recordings/
         └── broadcast/
 ```
 
 ### Distribution
-- **Single file**: `dist\EncoderUploader.exe`
-- **ZIP package**: `EncoderUploader_Windows.zip` (ready for distribution)
+- **Single file**: `dist\StreamerUploader.exe`
+- **ZIP package**: `StreamerUploader_Windows.zip` (ready for distribution)
 
 ## Features of Standalone Executable
 - ✅ Self-contained single file (no Python installation required)
@@ -54,14 +54,14 @@ dist/
 - ✅ Proper Windows executable metadata
 
 ## Usage
-1. Extract or copy `EncoderUploader.exe` to desired location
+1. Extract or copy `StreamerUploader.exe` to desired location
 2. Run the executable
 3. Configure upload URL in settings
 4. Upload recordings with progress tracking
 - ✅ All Flask templates and static files bundled
 
 ## Distribution:
-Copy the entire `EncoderUploader_Standalone` folder to target systems. The executable will work on any Windows machine without requiring Python or any other dependencies.
+Copy the entire `StreamerUploader_Standalone` folder to target systems. The executable will work on any Windows machine without requiring Python or any other dependencies.
 
 ## File Size:
 - Executable: ~13.7MB
