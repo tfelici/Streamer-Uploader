@@ -1,7 +1,17 @@
 Requirement already satisfied: pyinstaller in c:\users\tfeli\appdata\local\programs\python\python312\lib\site-packages (6.14.0)
+Collecting pyinstaller
+  Downloading pyinstaller-6.14.1-py3-none-win_amd64.whl.metadata (8.3 kB)
 Requirement already satisfied: setuptools>=42.0.0 in c:\users\tfeli\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (80.9.0)
 Requirement already satisfied: altgraph in c:\users\tfeli\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (0.17.4)
 Requirement already satisfied: pefile!=2024.8.26,>=2022.5.30 in c:\users\tfeli\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (2023.2.7)
 Requirement already satisfied: pywin32-ctypes>=0.2.1 in c:\users\tfeli\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (0.2.3)
 Requirement already satisfied: pyinstaller-hooks-contrib>=2025.4 in c:\users\tfeli\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (2025.4)
 Requirement already satisfied: packaging>=22.0 in c:\users\tfeli\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (25.0)
+Downloading pyinstaller-6.14.1-py3-none-win_amd64.whl (1.4 MB)
+   ---------------------------------------- 1.4/1.4 MB 17.4 MB/s eta 0:00:00
+Installing collected packages: pyinstaller
+  Attempting uninstall: pyinstaller
+    Found existing installation: pyinstaller 6.14.0
+    Uninstalling pyinstaller-6.14.0:
+      Successfully uninstalled pyinstaller-6.14.0
+Successfully installed pyinstaller-6.14.1
