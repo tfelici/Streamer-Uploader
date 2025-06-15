@@ -1,7 +1,0 @@
-# Recordings Directory
-
-This directory contains uploaded recordings in MP4 format.
-
-The application will automatically create this directory structure when first run.
-
-Files in this directory are managed by the application and will be deleted after successful upload unless configured otherwise.

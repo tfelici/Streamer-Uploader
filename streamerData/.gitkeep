@@ -1,8 +1,0 @@
-# Encoder Data Directory
-
-This directory contains application settings and data files.
-
-- `settings.json` - Application configuration (upload URL, etc.)
-- `recordings/` - Directory containing uploaded recordings
-
-The application will automatically create required files when first run.
