@@ -31,10 +31,7 @@ Run `build_standalone.bat` to create a single-file executable.
 ### Output Structure
 ```
 dist/
-├── StreamerUploader.exe (single standalone executable ~50MB)
-└── streamerData/
-    └── recordings/
-        └── webcam/
+└── StreamerUploader.exe (single standalone executable ~50MB)
 ```
 
 ### Distribution

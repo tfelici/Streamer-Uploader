@@ -275,7 +275,8 @@ def upload_recording():
                 
                 upload_progress[upload_id]['status'] = 'completed'
                 upload_progress[upload_id]['progress'] = 100
-                upload_progress[upload_id]['result'] = result                # If upload succeeded and no error, delete the original file
+                upload_progress[upload_id]['result'] = result
+                # If upload succeeded and no error, delete the original file
                 if result.get('error') == '':
                     try:
                         safe_remove_file(file_path)

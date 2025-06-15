@@ -102,8 +102,7 @@ Streamer Uploader/
 │   ├── build_standalone.bat  # Build script
 │   ├── version_info.txt      # Windows executable metadata
 │   └── dist/                 # Built executable (after building)
-│       ├── StreamerUploader.exe  # Windows executable
-│       └── streamerData/      # Data directory structure
+│       └── StreamerUploader.exe  # Windows executable
 ├── linux/                    # Linux build files
 │   ├── StreamerUploader_onefile.spec  # PyInstaller configuration
 │   ├── build_standalone.sh   # Build script
@@ -115,19 +114,8 @@ Streamer Uploader/
 ├── templates/
 │   └── index.html            # Web interface template
 ├── static/
-│   └── style.css            # Stylesheet
-└── streamerData/
-    ├── settings.json        # Application settings
-    └── recordings/
-        └── webcam/       # Recording files location
+    └── style.css            # Stylesheet
 ```
-
-## Configuration
-
-The application creates a `streamerData` folder in the same directory as the executable containing:
-
-- **settings.json**: Upload server URL configuration
-- **recordings/webcam/**: Location for MP4 recording files
 
 ## Upload Server Configuration
 

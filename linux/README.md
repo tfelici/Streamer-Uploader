@@ -58,10 +58,7 @@ After a successful build, you'll find:
 ### Package Contents
 ```
 dist/
-├── StreamerUploader          # Main executable
-└── streamerData/             # Data directory
-    └── recordings/
-        └── webcam/       # Recording files location
+└── StreamerUploader          # Main executable
 ```
 
 ## Runtime Requirements

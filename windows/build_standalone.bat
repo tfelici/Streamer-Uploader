@@ -60,9 +60,6 @@ if %errorlevel% neq 0 (
 REM Create directory structure for distribution
 echo Setting up distribution structure...
 if not exist "dist" mkdir "dist"
-if not exist "dist\streamerData" mkdir "dist\streamerData"
-if not exist "dist\streamerData\recordings" mkdir "dist\streamerData\recordings"
-if not exist "dist\streamerData\recordings\webcam" mkdir "dist\streamerData\recordings\webcam"
 
 REM Check if the standalone executable was created successfully
 if not exist "dist\StreamerUploader_Standalone.exe" (
@@ -74,16 +71,6 @@ if not exist "dist\StreamerUploader_Standalone.exe" (
 
 REM Move the standalone executable to dist folder
 move "dist\StreamerUploader_Standalone.exe" "dist\StreamerUploader.exe"
-
-REM Copy existing settings if they exist
-if exist "..\streamerData\settings.json" copy "..\streamerData\settings.json" "dist\streamerData\settings.json"
-
-REM Copy existing recordings if they exist
-if exist "..\streamerData\recordings\webcam\*.mp4" copy "..\streamerData\recordings\webcam\*.mp4" "dist\streamerData\recordings\webcam\"
-
-REM Create a release package (ZIP file for easy distribution)
-echo Creating release package...
-powershell -Command "Compress-Archive -Path 'dist' -DestinationPath 'StreamerUploader_Windows.zip' -Force"
 
 echo.
 echo ====================================================================

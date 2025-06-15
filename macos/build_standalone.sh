@@ -103,12 +103,7 @@ if [ -f "dist/StreamerUploader" ]; then
     chmod +x dist/StreamerUploader
     echo "✅ Executable permissions set"
     
-    # Create data directory structure
-    echo ""
-    echo "📂 Creating data directory structure..."
-    mkdir -p dist/streamerData/recordings/webcam
-    echo "✅ Directory structure created"
-    
+    # Optional: Create DMG (commented out - requires additional tools)   
     # Optional: Code signing (commented out - requires developer certificate)
     # echo ""
     # echo "🔏 Code signing (optional)..."

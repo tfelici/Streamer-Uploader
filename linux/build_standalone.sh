@@ -85,13 +85,7 @@ if [ -f "dist/StreamerUploader" ]; then
     # Make executable
     chmod +x dist/StreamerUploader
     echo "✅ Executable permissions set"
-    
-    # Create data directory structure
-    echo ""
-    echo "📂 Creating data directory structure..."
-    mkdir -p dist/streamerData/recordings/webcam
-    echo "✅ Directory structure created"
-    
+      
     echo ""
     echo "🎉 Linux build complete!"
     echo ""
