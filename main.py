@@ -47,7 +47,7 @@ else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 STREAMER_DATA_DIR = os.path.join(BASE_DIR, 'streamerData')
-RECORDINGS_DIR = os.path.join(STREAMER_DATA_DIR, 'recordings', 'broadcast')
+RECORDINGS_DIR = os.path.join(STREAMER_DATA_DIR, 'recordings', 'webcam')
 SETTINGS_FILE = os.path.join(STREAMER_DATA_DIR, 'settings.json')
 
 # Create directories if they don't exist

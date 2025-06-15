@@ -34,7 +34,7 @@ dist/
 ├── StreamerUploader.exe (single standalone executable ~50MB)
 └── streamerData/
     └── recordings/
-        └── broadcast/
+        └── webcam/
 ```
 
 ### Distribution

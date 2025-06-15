@@ -61,7 +61,7 @@ dist/
 ├── StreamerUploader          # Main executable
 └── streamerData/             # Data directory
     └── recordings/
-        └── broadcast/       # Recording files location
+        └── webcam/       # Recording files location
 ```
 
 ## Runtime Requirements

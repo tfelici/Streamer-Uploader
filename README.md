@@ -119,7 +119,7 @@ Streamer Uploader/
 └── streamerData/
     ├── settings.json        # Application settings
     └── recordings/
-        └── broadcast/       # Recording files location
+        └── webcam/       # Recording files location
 ```
 
 ## Configuration
@@ -127,7 +127,7 @@ Streamer Uploader/
 The application creates a `streamerData` folder in the same directory as the executable containing:
 
 - **settings.json**: Upload server URL configuration
-- **recordings/broadcast/**: Location for MP4 recording files
+- **recordings/webcam/**: Location for MP4 recording files
 
 ## Upload Server Configuration
 
@@ -207,7 +207,7 @@ The application automatically checks the upload server for overlapping files:
 - Ensure server accepts the authentication key
 
 **"Files not visible"**
-- Check `streamerData/recordings/broadcast/` folder exists
+- Check `streamerData/recordings/webcam/` folder exists
 - Ensure MP4 files are in the correct directory
 - Verify file permissions
 

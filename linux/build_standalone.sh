@@ -89,7 +89,7 @@ if [ -f "dist/StreamerUploader" ]; then
     # Create data directory structure
     echo ""
     echo "📂 Creating data directory structure..."
-    mkdir -p dist/streamerData/recordings/broadcast
+    mkdir -p dist/streamerData/recordings/webcam
     echo "✅ Directory structure created"
     
     echo ""
