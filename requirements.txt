@@ -1,6 +1,10 @@
+# Runtime dependencies for Streamer Uploader
 Flask>=2.3.0
 requests>=2.31.0
 requests-toolbelt>=1.0.0
-pyinstaller>=6.0.0
 pywebview>=4.0.0
 pymediainfo>=6.0.0
+
+# Development/Build dependencies
+# Note: pyinstaller is only needed for building executables
+pyinstaller>=6.0.0
