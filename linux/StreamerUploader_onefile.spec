@@ -19,6 +19,7 @@ static_files = collect_data_files('static', include_py_files=False)
 datas = []
 datas.append(('../templates/index.html', 'templates'))
 datas.append(('../static/style.css', 'static'))
+datas.append(('../splash.png', '.'))
 
 # Collect all webview submodules
 webview_modules = collect_submodules('webview')
@@ -66,9 +67,23 @@ a = Analysis(
 
 pyz = PYZ(a.pure)
 
+# Create splash screen
+splash = Splash(
+    '../splash.png',
+    binaries=a.binaries,
+    datas=a.datas,
+    text_pos=(200, 260),
+    text_size=12,
+    text_color='white',
+    text_default='Loading Streamer Uploader...',
+    minify_script=True
+)
+
 exe = EXE(
     pyz,
     a.scripts,
+    splash,
+    splash.binaries,
     a.binaries,
     a.datas,
     [],

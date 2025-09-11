@@ -19,6 +19,13 @@ import requests
 import uuid
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 
+# Splash screen support
+try:
+    import pyi_splash
+    SPLASH_AVAILABLE = True
+except ImportError:
+    SPLASH_AVAILABLE = False
+
 # Use pymediainfo for fast video duration extraction
 try:
     from pymediainfo import MediaInfo
@@ -408,27 +415,79 @@ def main():
     """Main function to start the application"""
     print("Starting Streamer Uploader...")
     
+    # Update splash screen if available
+    if SPLASH_AVAILABLE:
+        try:
+            pyi_splash.update_text("🚀 Starting Streamer Uploader...")
+            time.sleep(0.5)
+            
+            pyi_splash.update_text("📡 Initializing network components...")
+            time.sleep(0.5)
+            
+            pyi_splash.update_text("📁 Setting up file directories...")
+            time.sleep(0.3)
+        except Exception as e:
+            print(f"Splash screen update error: {e}")
+    
     # Find available port
+    if SPLASH_AVAILABLE:
+        try:
+            pyi_splash.update_text("🔍 Finding available port...")
+        except:
+            pass
+    
     port = find_available_port()
     if not port:
         print("No available ports found!")
+        if SPLASH_AVAILABLE:
+            try:
+                pyi_splash.close()
+            except:
+                pass
         return
     
     print(f"Starting server on port {port}...")
+    
+    if SPLASH_AVAILABLE:
+        try:
+            pyi_splash.update_text(f"⚡ Starting server on port {port}...")
+        except:
+            pass
     
     # Start Flask server in background thread
     server_thread = threading.Thread(target=start_flask_server, args=(port,))
     server_thread.daemon = True
     server_thread.start()
     
+    if SPLASH_AVAILABLE:
+        try:
+            pyi_splash.update_text("⏳ Waiting for server to start...")
+        except:
+            pass
+    
     # Wait a moment for server to start
     time.sleep(2)
+    
+    if SPLASH_AVAILABLE:
+        try:
+            pyi_splash.update_text("🌐 Opening web interface...")
+        except:
+            pass
     
     # Create webview window
     window_title = "Streamer Uploader"
     window_url = f"http://127.0.0.1:{port}"
     
     print(f"Opening web viewer: {window_url}")
+    
+    if SPLASH_AVAILABLE:
+        try:
+            pyi_splash.update_text("✅ Ready! Opening window...")
+            time.sleep(0.5)
+            pyi_splash.close()
+        except:
+            pass
+    
     # Create and start webview
     webview.create_window(
         window_title, 
