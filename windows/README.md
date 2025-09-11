@@ -58,7 +58,7 @@ dist/
 - ✅ All Flask templates and static files bundled
 
 ## Distribution:
-Copy the entire `StreamerUploader_Standalone` folder to target systems. The executable will work on any Windows machine without requiring Python or any other dependencies.
+Copy the entire `StreamerUploader` folder to target systems. The executable will work on any Windows machine without requiring Python or any other dependencies.
 
 ## File Size:
 - Executable: ~13.7MB

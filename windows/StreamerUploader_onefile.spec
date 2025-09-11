@@ -10,6 +10,7 @@ a = Analysis(
         ('../templates', 'templates'),
         ('../static', 'static'),
         ('../utils.py', '.'),
+        ('../splash.png', '.'),
     ],
     hiddenimports=[
         'webview',
@@ -71,7 +72,6 @@ a = Analysis(
         'numpy',
         'scipy',
         'pandas',
-        'PIL',
         'PyQt5',
         'PyQt6',
         'PySide2',
@@ -85,14 +85,27 @@ a = Analysis(
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
+splash = Splash(
+    '../splash.png',
+    binaries=a.binaries,
+    datas=a.datas,
+    text_pos=(230, 260),
+    text_size=12,
+    text_color='white',
+    text_default='Loading Streamer Uploader...',
+    minify_script=True
+)
+
 exe = EXE(
     pyz,
     a.scripts,
+    splash,
+    splash.binaries,
     a.binaries,
     a.zipfiles,
     a.datas,
     [],
-    name='StreamerUploader_Standalone',
+    name='StreamerUploader',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

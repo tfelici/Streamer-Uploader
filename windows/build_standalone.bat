@@ -62,15 +62,12 @@ echo Setting up distribution structure...
 if not exist "dist" mkdir "dist"
 
 REM Check if the standalone executable was created successfully
-if not exist "dist\StreamerUploader_Standalone.exe" (
+if not exist "dist\StreamerUploader.exe" (
     echo ERROR: Standalone executable was not created successfully
     echo Please check the PyInstaller output above for errors
     pause
     exit /b 1
 )
-
-REM Move the standalone executable to dist folder
-move "dist\StreamerUploader_Standalone.exe" "dist\StreamerUploader.exe"
 
 echo.
 echo ====================================================================

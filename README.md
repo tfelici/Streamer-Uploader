@@ -81,7 +81,7 @@ A standalone Windows application that replicates the "Upload Recordings" functio
    cd windows
    build_standalone.bat
    ```
-4. **Find Output**: The executable will be in `windows/dist/StreamerUploader_Standalone/`
+4. **Find Output**: The executable will be in `windows/dist/StreamerUploader.exe`
 
 #### Testing Before Building
 
